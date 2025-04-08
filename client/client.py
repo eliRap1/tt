@@ -7,12 +7,11 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     except ConnectionRefusedError:
         print("Connection has failed to the server")
     else:
-        data_to_send = input("enter 'Hello'")
-        if data_to_send == "Hello":
-            print(f"Sending: {data_to_send}")
-            binary_data = data_to_send.encode('utf-8')
+        data = s.recv(1024)
+        data_to_send = data
+        if "Hello" ==  data.decode():
+            print(f"Sending: {data}")
+            binary_data = data_to_send#.encode('utf-8')
             s.sendall(binary_data)
-            data = s.recv(1024)
-            print(f"Received: {data}")
         else:
-            print("you are suppose to write Hello")
+            print("Server suppose to write Hello")

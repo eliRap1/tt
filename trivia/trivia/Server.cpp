@@ -2,5 +2,12 @@
 
 void Server::run()
 {
-	m_communicator.startHandleRequests();
+	std::string input;
+	std::thread th(&Communicator::startHandleRequests, &m_communicator);
+	th.detach();
+	while (input != "exit")
+	{
+		std::cin >> input;
+	}
+
 }
