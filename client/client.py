@@ -1,4 +1,6 @@
 import socket
+import struct
+import json
 HOST = '127.0.0.1'
 PORT = 3353
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -7,11 +9,20 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     except ConnectionRefusedError:
         print("Connection has failed to the server")
     else:
-        data = s.recv(1024)
-        data_to_send = data
-        if "Hello" ==  data.decode():
-            print(f"Sending: {data}")
-            binary_data = data_to_send#.encode('utf-8')
-            s.sendall(binary_data)
+        header = s.recv(5)
+        if len(header) < 5:
+            print("Header is incomplete")
         else:
-            print("Server suppose to write Hello")
+            code, length = struct.unpack('>BI', header)
+            print(f"Code: {code}, Length: {length}")
+            data = b""
+            while len(data) < length:
+                packet = s.recv(length - len(data))
+                if not packet:
+                    break
+                data += packet
+            try:
+                message = json.loads(data.decode('utf-8'))
+                print("Parsed JSON:", message)
+            except json.JSONDecodeError:
+                print("Failed to decode JSON.")
