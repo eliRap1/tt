@@ -21,4 +21,5 @@ private:
 
 public:
 	void startHandleRequests();
+	void handleNewClient(SOCKET c);
 };

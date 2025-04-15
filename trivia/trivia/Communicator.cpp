@@ -83,3 +83,71 @@ void Communicator::startHandleRequests()
 {
 	bindAndListen();
 }
+
+void Communicator::handleNewClient(SOCKET c)
+{
+	try
+	{
+		IRequestHandler* currentHandler = new LoginRequestHandler();
+
+		while (true)
+		{
+			//read first 5 bytes
+			unsigned char header[5];
+			int bytesRead = recv(c, reinterpret_cast<char*>(header), 5, 0);
+			if (bytesRead <= 0) break;
+
+			unsigned char requestId = header[0];
+			unsigned int messageSize =
+				(header[1] << 24) |
+				(header[2] << 16) |
+				(header[3] << 8) |
+				(header[4]);
+
+			//get msg
+			std::vector<unsigned char> buffer(messageSize);
+			int totalReceived = 0;
+			while (totalReceived < messageSize)
+			{
+				int received = recv(c, reinterpret_cast<char*>(&buffer[totalReceived]), messageSize - totalReceived, 0);
+				if (received <= 0) break;
+				totalReceived += received;
+			}
+
+			//build RequestInfo
+			RequestInfo reqInfo;
+			reqInfo.id = requestId;
+			reqInfo.receivalTime = time(nullptr);
+			reqInfo.buffer = buffer;
+
+			//check relevent
+			if (!currentHandler->isRequestRelevant(reqInfo))
+			{
+				ErrorResponse error{ "Request not relevant" };
+				auto errResponse = JsonResponsePacketSerializer::serializeErrorResponse(error);
+				send(c, reinterpret_cast<const char*>(errResponse.data()), errResponse.size(), 0);
+				continue;
+			}
+			//check 
+			RequestResult result = currentHandler->handleRequest(reqInfo);
+
+			// sent reponse
+			send(c, reinterpret_cast<const char*>(result.response.data()), result.response.size(), 0);
+
+			//-> hndler
+			if (result.newHandler != nullptr)
+			{
+				delete currentHandler;
+				currentHandler = result.newHandler;
+			}
+		}
+
+		delete currentHandler;
+		closesocket(c);
+	}
+	catch (std::exception e)
+	{
+		std::cout << "Exception occurred with client socket." << std::endl;
+		closesocket(c);
+	}
+}
