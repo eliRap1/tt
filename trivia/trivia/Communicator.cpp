@@ -35,8 +35,8 @@ void Communicator::bindAndListen()
 		}
 		else
 		{
-			IRequestHandler* newClient = new LoginRequestHandler();
-			this->m_clients[clientSocket] = newClient;
+			//IRequestHandler* newClient = new LoginRequestHandler();
+			/*this->m_clients[clientSocket] = newClient;*/
 			std::thread th(&Communicator::handleNewClients, this, clientSocket);
 			th.detach();
 			std::cout << "Client connected" << std::endl;
@@ -44,57 +44,71 @@ void Communicator::bindAndListen()
 	}
 }
 
-void Communicator::handleNewClients(SOCKET clientSocket)
-{
-	bool isExit = false;
-	std::string input = "Hello";
-	char buffer[1024];
-	send(clientSocket, input.c_str(), input.size(), 0);
-	while (!isExit)
-	{
-		int bytesReceived = recv(clientSocket, buffer, 1024, 0);
-		if (bytesReceived == 0)
-		{
-			isExit = true;
-		}
-		else if (bytesReceived < 0)
-		{
-			// handle error
-		}
-		else
-		{
-			buffer[bytesReceived] = '\0';
-			std::cout << buffer << std::endl;
-		}
-		if(input == "exit")
-		{
-			isExit = true;
-		}
-		//input = this->m_clients[clientSocket]->handleRequest(input);
-	}
-	closesocket(clientSocket);
-	delete this->m_clients[clientSocket];
-	this->m_clients.erase(clientSocket);
-	std::cout << "Client disconnected" << std::endl;
-
-}
+//void Communicator::handleNewClients(SOCKET clientSocket)
+//{
+//	bool isExit = false;
+//	std::string input = "Hello";
+//	char buffer[1024];
+//	send(clientSocket, input.c_str(), input.size(), 0);
+//	while (!isExit)
+//	{
+//		int bytesReceived = recv(clientSocket, buffer, 1024, 0);
+//		if (bytesReceived == 0)
+//		{
+//			isExit = true;
+//		}
+//		else if (bytesReceived < 0)
+//		{
+//			// handle error
+//		}
+//		else
+//		{
+//			buffer[bytesReceived] = '\0';
+//			std::cout << buffer << std::endl;
+//		}
+//		if(input == "exit")
+//		{
+//			isExit = true;
+//		}
+//		//input = this->m_clients[clientSocket]->handleRequest(input);
+//	}
+//	closesocket(clientSocket);
+//	delete this->m_clients[clientSocket];
+//	this->m_clients.erase(clientSocket);
+//	std::cout << "Client disconnected" << std::endl;
+//
+//}
 
 void Communicator::startHandleRequests()
 {
 	bindAndListen();
 }
 
-void Communicator::handleNewClient(SOCKET c)
+void Communicator::handleNewClients(SOCKET c)
 {
 	try
 	{
 		IRequestHandler* currentHandler = new LoginRequestHandler();
+		this->m_clients[c] = currentHandler;
+
+		// 0) Initial prompt: ask client to send login credentials
+		std::vector<unsigned char> initBuf;
+		initBuf.push_back(LOGIN_CODE);
+		initBuf.push_back(0);
+		initBuf.push_back(0);
+		initBuf.push_back(0);
+		initBuf.push_back(0);
+		send(c,
+			reinterpret_cast<const char*>(initBuf.data()),
+			static_cast<int>(initBuf.size()),
+			0);
 
 		while (true)
 		{
-			//read first 5 bytes
+			// 1) recv header (1 byte id + 4 bytes size)
 			unsigned char header[5];
 			int bytesRead = recv(c, reinterpret_cast<char*>(header), 5, 0);
+			std::cout << "bytesRead: " << bytesRead << std::endl;
 			if (bytesRead <= 0) break;
 
 			unsigned char requestId = header[0];
@@ -104,37 +118,45 @@ void Communicator::handleNewClient(SOCKET c)
 				(header[3] << 8) |
 				(header[4]);
 
-			//get msg
+			// 2) recv the JSON payload
 			std::vector<unsigned char> buffer(messageSize);
 			int totalReceived = 0;
-			while (totalReceived < messageSize)
+			while (totalReceived < (int)messageSize)
 			{
-				int received = recv(c, reinterpret_cast<char*>(&buffer[totalReceived]), messageSize - totalReceived, 0);
+				int received = recv(c,
+					reinterpret_cast<char*>(&buffer[totalReceived]),
+					messageSize - totalReceived,
+					0);
 				if (received <= 0) break;
 				totalReceived += received;
 			}
+			if (totalReceived != (int)messageSize) break;
 
-			//build RequestInfo
+			// 3) build RequestInfo
 			RequestInfo reqInfo;
 			reqInfo.id = requestId;
-			reqInfo.receivalTime = time(nullptr);
-			reqInfo.buffer = buffer;
+			reqInfo.receivalTime = std::time(nullptr);
+			reqInfo.buffer = std::move(buffer);
 
-			//check relevent
-			if (!currentHandler->isRequestRelevant(reqInfo))
+			// 4) handle relevance & dispatch
+			RequestResult result;
+			if (currentHandler->isRequestRelevant(reqInfo))
 			{
-				ErrorResponse error{ "Request not relevant" };
-				auto errResponse = JsonResponsePacketSerializer::serializeErrorResponse(error);
-				send(c, reinterpret_cast<const char*>(errResponse.data()), errResponse.size(), 0);
-				continue;
+				result = currentHandler->handleRequest(reqInfo);
 			}
-			//check 
-			RequestResult result = currentHandler->handleRequest(reqInfo);
+			else
+			{
+				ErrorResponse err{ "Request not relevant to this handler" };
+				result.response = JsonResponsePacketSerializer::serializeErrorResponse(err);
+			}
 
-			// sent reponse
-			send(c, reinterpret_cast<const char*>(result.response.data()), result.response.size(), 0);
+			// 5) send back the serialized response
+			send(c,
+				reinterpret_cast<const char*>(result.response.data()),
+				static_cast<int>(result.response.size()),
+				0);
 
-			//-> hndler
+			// 6) switch to a new handler if one was returned
 			if (result.newHandler != nullptr)
 			{
 				delete currentHandler;
@@ -142,12 +164,16 @@ void Communicator::handleNewClient(SOCKET c)
 			}
 		}
 
+		// cleanup
 		delete currentHandler;
 		closesocket(c);
+		delete this->m_clients[c];
+		this->m_clients.erase(c);
+		std::cout << "Client disconnected" << std::endl;
 	}
-	catch (std::exception e)
+	catch (const std::exception& e)
 	{
-		std::cout << "Exception occurred with client socket." << std::endl;
+		std::cerr << "Exception occurred with client socket: " << e.what() << std::endl;
 		closesocket(c);
 	}
 }
