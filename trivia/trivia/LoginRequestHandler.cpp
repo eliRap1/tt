@@ -41,3 +41,15 @@ bool LoginRequestHandler::isRequestRelevant(RequestInfo& request)
 {
 	return request.id == LOGIN_CODE || request.id == SIGNUP_CODE;
 }
+
+RequestResult LoginRequestHandler::login(RequestInfo& request)
+{
+	RequestResult resu;
+	resu.newHandler->handleRequest(request);
+
+}
+
+RequestResult LoginRequestHandler::signup(RequestInfo& request)
+{
+
+}
