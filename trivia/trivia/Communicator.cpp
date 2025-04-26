@@ -44,40 +44,6 @@ void Communicator::bindAndListen()
 	}
 }
 
-//void Communicator::handleNewClients(SOCKET clientSocket)
-//{
-//	bool isExit = false;
-//	std::string input = "Hello";
-//	char buffer[1024];
-//	send(clientSocket, input.c_str(), input.size(), 0);
-//	while (!isExit)
-//	{
-//		int bytesReceived = recv(clientSocket, buffer, 1024, 0);
-//		if (bytesReceived == 0)
-//		{
-//			isExit = true;
-//		}
-//		else if (bytesReceived < 0)
-//		{
-//			// handle error
-//		}
-//		else
-//		{
-//			buffer[bytesReceived] = '\0';
-//			std::cout << buffer << std::endl;
-//		}
-//		if(input == "exit")
-//		{
-//			isExit = true;
-//		}
-//		//input = this->m_clients[clientSocket]->handleRequest(input);
-//	}
-//	closesocket(clientSocket);
-//	delete this->m_clients[clientSocket];
-//	this->m_clients.erase(clientSocket);
-//	std::cout << "Client disconnected" << std::endl;
-//
-//}
 
 void Communicator::startHandleRequests()
 {
@@ -88,21 +54,9 @@ void Communicator::handleNewClients(SOCKET c)
 {
 	try
 	{
-		IRequestHandler* currentHandler = new LoginRequestHandler();
+		IRequestHandler* currentHandler = new LoginRequestHandler(this->m_handlerFactory);
 		this->m_clients[c] = currentHandler;
 		int clientIdleTime = 0;
-		// 0) Initial prompt: ask client to send login credentials
-		/*std::vector<unsigned char> initBuf;
-		initBuf.push_back(LOGIN_CODE);
-		initBuf.push_back(0);
-		initBuf.push_back(0);
-		initBuf.push_back(0);
-		initBuf.push_back(0);
-		send(c,
-			reinterpret_cast<const char*>(initBuf.data()),
-			static_cast<int>(initBuf.size()),
-			0);*/
-
 		while (clientIdleTime < 500)
 		{
 			// 1) recv header (1 byte id + 4 bytes size)
