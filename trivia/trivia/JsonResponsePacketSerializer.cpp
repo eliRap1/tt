@@ -10,7 +10,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeLoginResponse(
     j["status"] = response.status;
     std::string jsonString = j.dump();
     std::vector<unsigned char> buffer;
-    buffer.push_back(LOGIN_CODE);
+    buffer.push_back(LOGIN_CODE); 
 	// each line of the next 4 is moving the size so only 1 byte will be taken each time 
     unsigned int size = jsonString.size();
     buffer.push_back((size >> 24) & 0xFF);

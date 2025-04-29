@@ -2,8 +2,8 @@
 #include <iostream>
 #include <vector>
 #include "json.hpp"
-#define LOGIN_CODE "e"
-#define SIGNUP_CODE "f"
+#define LOGIN_CODE 101 //e
+#define SIGNUP_CODE 102 //f
 #define ERROR_CODE 999
 using json = nlohmann::json;
 typedef struct LoginResponse 

@@ -44,9 +44,25 @@ bool LoginRequestHandler::isRequestRelevant(RequestInfo& request)
 
 RequestResult LoginRequestHandler::login(RequestInfo& request)
 {
-	RequestResult resu;
-	resu.newHandler->handleRequest(request);
-
+	LoginRequest log;
+	LoginStatus status;
+	RequestResult res;
+	log = JsonRequestPacketDeserializer::deserializeLoginRequest(request.buffer);
+	std::string username = log.username;
+	std::string password = log.password;
+	if (LoginStatus::Success == this->m_handlerFactory.getLoginManager().login(username, password))
+	{
+		LoginResponse response{ LOGIN_CODE };
+		res.response = JsonResponsePacketSerializer::serializeLoginResponse(response);
+		MenuRequestHandler* menuHandler = new MenuRequestHandler(); // Placeholder for the next handler – replace with actual logic late
+		res.newHandler = menuHandler;
+	}
+	else
+	{
+		ErrorResponse error{ "Login failed" };
+		res.response = JsonResponsePacketSerializer::serializeErrorResponse(error);
+	}
+	return res;
 }
 
 RequestResult LoginRequestHandler::signup(RequestInfo& request)
