@@ -25,5 +25,6 @@
     <ClInclude Include="SqliteDataBase.h" />
     <ClInclude Include="WSAInitializer.h" />
     <ClInclude Include="LoggedUser.h" />
+    <ClInclude Include="IDatabase.h" />
   </ItemGroup>
 </Project>
