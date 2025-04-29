@@ -1,14 +1,19 @@
 #include "Server.h"
-
+#include "SqliteDataBase.h"
 int main()
 {
-	Server r;
+	SqliteDataBase* db = new SqliteDataBase("trivia.db");
+	RequestHandlerFactory factory(db);
+	Server server(db, factory);  
+
 	try
 	{
-		r.run();
+		server.run();
 	}
-	catch(const std::exception& e)
+	catch (const std::exception& e)
 	{
 		std::cout << e.what() << std::endl;
 	}
+
+	delete db;  
 }

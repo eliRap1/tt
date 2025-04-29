@@ -76,14 +76,14 @@ RequestResult LoginRequestHandler::login(RequestInfo& request)
 RequestResult LoginRequestHandler::signup(RequestInfo& request)
 {
 	SignupRequest log;
-	SignupStatus status;
+	SignUpStatus status;
 	RequestResult res;
 	log = JsonRequestPacketDeserializer::deserializeSignupRequest(request.buffer);
 	std::string username = log.username;
 	std::string password = log.password;
 	std::string email = log.email; // Add email to
 	status = this->m_handlerFactory.getLoginManager().signup(username, password, email);
-	if (status == SignupStatus::Success)
+	if (status == SignUpStatus::Success)
 	{
 		LoginResponse response{ SIGNUP_CODE };
 		res.response = JsonResponsePacketSerializer::serializeLoginResponse(response);
@@ -93,8 +93,8 @@ RequestResult LoginRequestHandler::signup(RequestInfo& request)
 	else
 	{
 		std::string errCode;
-		if (status == SignupStatus::UserAlreadyExists) errCode = "UserAlreadyExists";
-		else if(status == SignupStatus::DbError) errCode = "DbErrors";
+		if (status == SignUpStatus::UserAlreadyExists) errCode = "UserAlreadyExists";
+		else if(status == SignUpStatus::DbError) errCode = "DbErrors";
 		else { errCode = "Signup error"; }
 		ErrorResponse error{ errCode };
 		res.response = JsonResponsePacketSerializer::serializeErrorResponse(error);
