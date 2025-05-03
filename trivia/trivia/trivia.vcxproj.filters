@@ -10,7 +10,7 @@
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="SqliteDataBase.cpp" />
     <ClCompile Include="WSAInitializer.cpp" />
-    <ClCompile Include="LogiinManager.cpp" />
+    <ClCompile Include="LoginManager.cpp" />
     <ClCompile Include="LoggedUser.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -9,7 +9,7 @@ enum class LoginStatus { Success, UserNotExist, WrongPassword, AlreadyLoggedIn, 
 class LoginManager
 {
 public:
-    LoginManager(IDatabase* database);
+	LoginManager(IDatabase* database);
     SignUpStatus signup(const std::string& username, const std::string& password, const std::string& email);
     LoginStatus login(const std::string& username, const std::string& password);
     void logout(const std::string& username);
