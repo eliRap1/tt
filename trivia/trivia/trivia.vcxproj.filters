@@ -12,6 +12,10 @@
     <ClCompile Include="WSAInitializer.cpp" />
     <ClCompile Include="LoginManager.cpp" />
     <ClCompile Include="LoggedUser.cpp" />
+    <ClCompile Include="MenuRequestHandler.cpp" />
+    <ClCompile Include="RoomManager.cpp" />
+    <ClCompile Include="Room.cpp" />
+    <ClCompile Include="StatisticsManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Communicator.h" />
@@ -26,5 +30,9 @@
     <ClInclude Include="WSAInitializer.h" />
     <ClInclude Include="LoggedUser.h" />
     <ClInclude Include="IDatabase.h" />
+    <ClInclude Include="MenuRequestHandler.h" />
+    <ClInclude Include="RoomManager.h" />
+    <ClInclude Include="Room.h" />
+    <ClInclude Include="StatisticsManager.h" />
   </ItemGroup>
 </Project>
