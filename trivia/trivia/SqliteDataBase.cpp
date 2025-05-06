@@ -44,7 +44,7 @@ void SqliteDataBase::createUsersTable()
     }
 }
 
-bool SqliteDataBase::doesUserExist(const std::string& username)
+int SqliteDataBase::doesUserExist(const std::string& username)
 {
     sqlite3_stmt* stmt;
     const char* sql = "SELECT username FROM users WHERE username = ?;";
@@ -60,7 +60,7 @@ bool SqliteDataBase::doesUserExist(const std::string& username)
     return exists;
 }
 
-bool SqliteDataBase::doesPasswordMatch(const std::string& username, const std::string& password)
+int SqliteDataBase::doesPasswordMatch(const std::string& username, const std::string& password)
 {
     sqlite3_stmt* stmt;
     const char* sql = "SELECT password FROM users WHERE username = ?;";
@@ -80,7 +80,7 @@ bool SqliteDataBase::doesPasswordMatch(const std::string& username, const std::s
     return match;
 }
 
-bool SqliteDataBase::addNewUser(const std::string& username, const std::string& password, const std::string& email)
+int SqliteDataBase::addNewUser(const std::string& username, const std::string& password, const std::string& email)
 {
     sqlite3_stmt* stmt;
     const char* sql = "INSERT INTO users (username, password, email) VALUES (?, ?, ?);";
@@ -98,4 +98,72 @@ bool SqliteDataBase::addNewUser(const std::string& username, const std::string& 
 
     sqlite3_finalize(stmt);
     return false;
+}
+
+float SqliteDataBase::getPlayerAverageAnswerTime(const std::string& username) 
+{
+    const char* sql = "SELECT AVG(answer_time) FROM statistics WHERE username = ?;";
+    sqlite3_stmt* stmt;
+    float avg = 0;
+    if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) == SQLITE_OK)
+    {
+        sqlite3_bind_text(stmt, 1, username.c_str(), -1, SQLITE_STATIC);
+        if (sqlite3_step(stmt) == SQLITE_ROW)
+        {
+            avg = static_cast<float>(sqlite3_column_double(stmt, 0));
+        }
+        sqlite3_finalize(stmt);
+    }
+    return avg;
+}
+
+int SqliteDataBase::getNumOfCorrectAnswers(const std::string& username) 
+{
+    const char* sql = "SELECT COUNT(*) FROM statistics WHERE username = ? AND is_correct = 1;";
+    sqlite3_stmt* stmt;
+    int count = 0;
+    if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) == SQLITE_OK)
+    {
+        sqlite3_bind_text(stmt, 1, username.c_str(), -1, SQLITE_STATIC);
+        if (sqlite3_step(stmt) == SQLITE_ROW) 
+        {
+            count = sqlite3_column_int(stmt, 0);
+        }
+        sqlite3_finalize(stmt);
+    }
+    return count;
+}
+
+int SqliteDataBase::getNumOfTotalAnswers(const std::string& username) 
+{
+    const char* sql = "SELECT COUNT(*) FROM statistics WHERE username = ?;";
+    sqlite3_stmt* stmt;
+    int count = 0;
+    if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) == SQLITE_OK)
+    {
+        sqlite3_bind_text(stmt, 1, username.c_str(), -1, SQLITE_STATIC);
+        if (sqlite3_step(stmt) == SQLITE_ROW) 
+        {
+            count = sqlite3_column_int(stmt, 0);
+        }
+        sqlite3_finalize(stmt);
+    }
+    return count;
+}
+
+int SqliteDataBase::getNumOfPlayerGames(const std::string& username) 
+{
+    const char* sql = "SELECT COUNT(DISTINCT game_id) FROM statistics WHERE username = ?;";
+    sqlite3_stmt* stmt;
+    int count = 0;
+    if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) == SQLITE_OK)
+    {
+        sqlite3_bind_text(stmt, 1, username.c_str(), -1, SQLITE_STATIC);
+        if (sqlite3_step(stmt) == SQLITE_ROW) 
+        {
+            count = sqlite3_column_int(stmt, 0);
+        }
+        sqlite3_finalize(stmt);
+    }
+    return count;
 }
