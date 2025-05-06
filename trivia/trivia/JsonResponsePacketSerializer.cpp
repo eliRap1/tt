@@ -61,3 +61,4 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeSignupResponse
     buffer.insert(buffer.end(), jsonStr.begin(), jsonStr.end());
     return buffer;
 }
+
