@@ -15,7 +15,6 @@ typedef struct RequestResult
 	std::vector<unsigned char> response;
 	IRequestHandler* newHandler;
 } RequestResult;
-typedef struct MenuRequestHandler {} MenuRequestHandler;
 class IRequestHandler
 {
 public:

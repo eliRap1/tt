@@ -1,6 +1,7 @@
 #pragma once
 #include "IRequestHandler.h"
 #include "RequestHandlerFactory.h"
+#include "MenuRequestHandler.h"
 #define LOGIN_CODE 101
 #define SIGNUP_CODE 102
 #define ERROR_CODE 999
