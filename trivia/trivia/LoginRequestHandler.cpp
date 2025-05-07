@@ -55,7 +55,7 @@ RequestResult LoginRequestHandler::login(RequestInfo& request)
 	{
 		LoginResponse response{ LOGIN_CODE };
 		res.response = JsonResponsePacketSerializer::serializeLoginResponse(response);
-		MenuRequestHandler* menuHandler = new MenuRequestHandler(); // Placeholder for the next handler – replace with actual logic late
+		//MenuRequestHandler* menuHandler = new MenuRequestHandler(); // Placeholder for the next handler – replace with actual logic late
 		res.newHandler = nullptr;
 	}
 	else
@@ -87,7 +87,7 @@ RequestResult LoginRequestHandler::signup(RequestInfo& request)
 	{
 		LoginResponse response{ SIGNUP_CODE };
 		res.response = JsonResponsePacketSerializer::serializeLoginResponse(response);
-		MenuRequestHandler* menuHandler = new MenuRequestHandler(); // Placeholder for the next handler – replace with actual logic late
+		//MenuRequestHandler* menuHandler = new MenuRequestHandler(); // Placeholder for the next handler – replace with actual logic late
 		res.newHandler = nullptr;
 	}
 	else
