@@ -1,64 +1,48 @@
+// JsonResponsePacketSerializer.cpp
 #include "JsonResponsePacketSerializer.h"
+
+using json = nlohmann::json;
 /*
-This function serializes the login response into a vector of unsigned char
-input: the response to serialize
-output: the serialized response
+    made this help function to make it easier to add length
 */
-std::vector<unsigned char> JsonResponsePacketSerializer::serializeLoginResponse(LoginResponse& response)
+static void addLengthToBuffer(std::vector<unsigned char>& buffer, int len) 
 {
-    json j;
-    j["status"] = response.status;
-    std::string jsonString = j.dump();
-    std::vector<unsigned char> buffer;
-    buffer.push_back(LOGIN_CODE); 
-	// each line of the next 4 is moving the size so only 1 byte will be taken each time 
-    unsigned int size = jsonString.size();
-    buffer.push_back((size >> 24) & 0xFF);
-    buffer.push_back((size >> 16) & 0xFF);
-    buffer.push_back((size >> 8) & 0xFF);
-    buffer.push_back(size & 0xFF);
-    // Append the JSON string itself
-    buffer.insert(buffer.end(), jsonString.begin(), jsonString.end());
-    return buffer;
+    buffer.push_back((len >> 24) & 0xFF);
+    buffer.push_back((len >> 16) & 0xFF);
+    buffer.push_back((len >> 8) & 0xFF);
+    buffer.push_back(len & 0xFF);
 }
-/*
-    this function serializes the error response into a vector of unsigned char
-	input: the response to serialize
-	output: the serialized response
-*/
-std::vector<unsigned char> JsonResponsePacketSerializer::serializeErrorResponse(ErrorResponse& response)
-{
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const ErrorResponse& res) {
     json j;
-    j["message"] = response.message;
-    std::string jsonStr = j.dump();
+    j["message"] = res.message;
+    std::string dump = j.dump();
     std::vector<unsigned char> buffer;
     buffer.push_back(ERROR_CODE);
-    unsigned int len = jsonStr.size();
-    buffer.push_back((len >> 24) & 0xFF);
-    buffer.push_back((len >> 16) & 0xFF);
-    buffer.push_back((len >> 8) & 0xFF);
-    buffer.push_back(len & 0xFF);
-    buffer.insert(buffer.end(), jsonStr.begin(), jsonStr.end());
+    addLengthToBuffer(buffer, dump.size());
+    buffer.insert(buffer.end(), dump.begin(), dump.end());
     return buffer;
 }
-/*
-    this function serializes the signup response into a vector of unsigned char
-	input: the response to serialize
-	output: the serialized response
-*/
-std::vector<unsigned char> JsonResponsePacketSerializer::serializeSignupResponse(SignupResponse& response)
-{
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const LoginResponse& res) {
     json j;
-    j["status"] = response.status;
-    std::string jsonStr = j.dump();
+    j["status"] = res.status;
+    std::string dump = j.dump();
+    std::vector<unsigned char> buffer;
+    buffer.push_back(LOGIN_CODE);
+    addLengthToBuffer(buffer, dump.size());
+    buffer.insert(buffer.end(), dump.begin(), dump.end());
+    return buffer;
+}
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const SignupResponse& res) {
+    json j;
+    j["status"] = res.status;
+    std::string dump = j.dump();
     std::vector<unsigned char> buffer;
     buffer.push_back(SIGNUP_CODE);
-    unsigned int len = jsonStr.size();
-    buffer.push_back((len >> 24) & 0xFF);
-    buffer.push_back((len >> 16) & 0xFF);
-    buffer.push_back((len >> 8) & 0xFF);
-    buffer.push_back(len & 0xFF);
-    buffer.insert(buffer.end(), jsonStr.begin(), jsonStr.end());
+    addLengthToBuffer(buffer, dump.size());
+    buffer.insert(buffer.end(), dump.begin(), dump.end());
     return buffer;
 }
 

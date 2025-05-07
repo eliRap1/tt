@@ -16,6 +16,7 @@
     <ClCompile Include="RoomManager.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="StatisticsManager.cpp" />
+    <ClCompile Include="Question.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Communicator.h" />
@@ -34,5 +35,6 @@
     <ClInclude Include="RoomManager.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="StatisticsManager.h" />
+    <ClInclude Include="Question.h" />
   </ItemGroup>
 </Project>

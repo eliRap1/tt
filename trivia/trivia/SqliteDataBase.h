@@ -11,9 +11,13 @@ public:
     bool open() override;
     bool close() override;
 
-    bool doesUserExist(const std::string& username) override;
-    bool doesPasswordMatch(const std::string& username, const std::string& password) override;
-    bool addNewUser(const std::string& username, const std::string& password, const std::string& email) override;
+    int doesUserExist(const std::string& username) override;
+    int doesPasswordMatch(const std::string& username, const std::string& password) override;
+    int addNewUser(const std::string& username, const std::string& password, const std::string& email) override;
+    float getPlayerAverageAnswerTime(const std::string& username);
+    int getNumOfCorrectAnswers(const std::string& username);
+    int getNumOfTotalAnswers(const std::string& username);
+    int getNumOfPlayerGames(const std::string& username);
 
 private:
     sqlite3* db;
