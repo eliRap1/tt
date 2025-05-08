@@ -5,7 +5,7 @@
 class SqliteDataBase : public IDatabase
 {
 public:
-    SqliteDataBase(const std::string& dbFileName = "users.db");
+    SqliteDataBase(const std::string& dbFileName);
     ~SqliteDataBase();
 
     bool open() override;
@@ -14,6 +14,9 @@ public:
     int doesUserExist(const std::string& username) override;
     int doesPasswordMatch(const std::string& username, const std::string& password) override;
     int addNewUser(const std::string& username, const std::string& password, const std::string& email) override;
+    std::list<Question> getQuestions(int amount) override;
+    int getPlayerScore(const std::string& username) override;
+    std::vector<std::string> getHighScores() override;
     float getPlayerAverageAnswerTime(const std::string& username);
     int getNumOfCorrectAnswers(const std::string& username);
     int getNumOfTotalAnswers(const std::string& username);

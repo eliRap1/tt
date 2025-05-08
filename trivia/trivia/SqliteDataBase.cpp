@@ -141,6 +141,68 @@ int SqliteDataBase::addNewUser(const std::string& username, const std::string& p
 	return false;
 }
 
+std::list<Question> SqliteDataBase::getQuestions(int amount)
+{
+	std::list<Question> questions;
+	std::string sql = "SELECT question, answer1, answer2, answer3, answer4, correct_answer FROM questions LIMIT " + std::to_string(amount);
+	sqlite3_stmt* stmt = nullptr;
+
+	if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) == SQLITE_OK)
+	{
+		while (sqlite3_step(stmt) == SQLITE_ROW)
+		{
+			std::string questionText = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+			std::vector<std::string> answers;
+			for (int i = 0; i < 4; ++i)
+			{
+				answers.push_back(reinterpret_cast<const char*>(sqlite3_column_text(stmt, i + 1)));
+			}
+			int correctAnswerIndex = sqlite3_column_int(stmt, 5) - 1;
+
+			Question q(questionText, answers, correctAnswerIndex);
+			questions.push_back(q);
+		}
+	}
+	sqlite3_finalize(stmt);
+	return questions;
+}
+
+
+int SqliteDataBase::getPlayerScore(const std::string& username)
+{
+	std::string sql = "SELECT correct_answers FROM statistics WHERE username = ?";
+	sqlite3_stmt* stmt = nullptr;
+	int score = 0;
+
+	if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) == SQLITE_OK)
+	{
+		sqlite3_bind_text(stmt, 1, username.c_str(), -1, SQLITE_STATIC);
+		if (sqlite3_step(stmt) == SQLITE_ROW)
+			score = sqlite3_column_int(stmt, 0);
+	}
+
+	sqlite3_finalize(stmt);
+	return score;
+}
+
+std::vector<std::string> SqliteDataBase::getHighScores()
+{
+	std::vector<std::string> highscores;
+	std::string sql = "SELECT username FROM statistics ORDER BY correct_answers DESC LIMIT 5";
+	sqlite3_stmt* stmt = nullptr;
+
+	if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) == SQLITE_OK)
+	{
+		while (sqlite3_step(stmt) == SQLITE_ROW)
+		{
+			highscores.push_back(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0)));
+		}
+	}
+
+	sqlite3_finalize(stmt);
+	return highscores;
+}
+
 float SqliteDataBase::getPlayerAverageAnswerTime(const std::string& username)
 {
 	const char* sql = "SELECT AVG(answer_time) FROM statistics WHERE username = ?;";

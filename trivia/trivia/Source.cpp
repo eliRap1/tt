@@ -2,7 +2,7 @@
 #include "SqliteDataBase.h"
 int main()
 {
-	/*SqliteDataBase* db = new SqliteDataBase("trivia.db");
+	SqliteDataBase* db = new SqliteDataBase("trivia.db");
 	RequestHandlerFactory factory(db);
 	Server server(db, factory);  
 
@@ -15,5 +15,5 @@ int main()
 		std::cout << e.what() << std::endl;
 	}
 
-	delete db;  */
+	delete db; 
 }
