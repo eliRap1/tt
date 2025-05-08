@@ -18,7 +18,9 @@ private:
 
 	void bindAndListen();
 	void handleNewClients(SOCKET c);
+	RequestHandlerFactory& m_handlerFactory;
 
 public:
+	Communicator(RequestHandlerFactory& handlerFactory) : m_handlerFactory(handlerFactory) {}
 	void startHandleRequests();
 };
