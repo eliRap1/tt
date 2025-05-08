@@ -20,8 +20,8 @@ public:
     int getNumOfPlayerGames(const std::string& username);
 
 private:
-    sqlite3* db;
-    std::string m_dbFileName;
+	sqlite3* db;
+	std::string m_dbFileName;
 
-    void createUsersTable();
+	void createTables();
 };
