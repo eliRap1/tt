@@ -1,23 +1,18 @@
 #pragma once
-#include "RequestHandlerFactory.h"
-typedef struct RoomData
-{
-	unsigned int id;
-	std::string name;
-	unsigned int maxPlayers;
-	unsigned int numOfQuestionsInGame;
-	unsigned int timePerQuestion;
-	//RoomStatus status;
-} RoomData;
+#include <algorithm>
+#include "RoomData.h"
+#include "LoggedUser.h"
+#include <vector>
+
 
 class Room
 {
 public:
-	Room(const LoggedUser& user, const RoomData& metadata) : m_metadata(metadata) { m_users.push_back(user); }
-	void addUser(const LoggedUser& user) { m_users.push_back(user); }
-	void removeUser(const LoggedUser& user) { m_users.erase(std::remove(m_users.begin(), m_users.end(), user), m_users.end()); }
-	const std::vector<std::string> getUsers() const { return std::vector<std::string>(m_users.begin(), m_users.end()); }
-	const RoomData& getRoomData() const { return m_metadata; }
+	Room(const LoggedUser& user, const RoomData& metadata);
+	void addUser(const LoggedUser& user);
+	void removeUser(const LoggedUser& user);
+	const std::vector<std::string> getUsers() const;
+	const RoomData& getRoomData() const;
 private:
 	RoomData m_metadata;
 	std::vector<LoggedUser> m_users;

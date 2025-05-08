@@ -1,6 +1,6 @@
 #pragma once
 #include "IRequestHandler.h"
-#include "RequestHandlerFactory.h"
+//#include "RequestHandlerFactory.h"
 #include "MenuRequestHandler.h"
 #define LOGIN_CODE 101
 #define SIGNUP_CODE 102
@@ -8,7 +8,7 @@
 class LoginRequestHandler : public IRequestHandler
 {
 public:
-	LoginRequestHandler(RequestHandlerFactory& handlerFactory) : m_handlerFactory(handlerFactory) {};
+	LoginRequestHandler(RequestHandlerFactory& handlerFactory);
 	RequestResult handleRequest(RequestInfo& request) override;
 	bool isRequestRelevant(RequestInfo& request) override;
 private:
