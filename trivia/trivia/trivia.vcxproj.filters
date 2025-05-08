@@ -37,4 +37,9 @@
     <ClInclude Include="StatisticsManager.h" />
     <ClInclude Include="Question.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Filter Include="NewFilter1">
+      <UniqueIdentifier>{c6e90251-248e-480b-8b8c-b82218797839}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
 </Project>

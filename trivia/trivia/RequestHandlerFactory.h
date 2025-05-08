@@ -1,8 +1,8 @@
 #pragma once
 #include "LoginManager.h"
-#include "LoginRequestHandler.h"
 #include "IDatabase.h"
 #include "RoomManager.h"
+
 class RequestHandlerFactory
 {
 private:
@@ -11,8 +11,8 @@ private:
 	RoomManager m_roomManager;
 
 public:
-	RequestHandlerFactory(IDatabase* database) : m_loginManager(database), m_database(database) {}
-	LoginManager& getLoginManager() { return this->m_loginManager; }
-	LoginRequestHandler* createLoginRequestHandler();//return new LoginRequestHandler(m_loginManager); }
+	RequestHandlerFactory(IDatabase* database);
+	LoginManager& getLoginManager();
+	IRequestHandler* createLoginRequestHandler();
 };
 

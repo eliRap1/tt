@@ -1,16 +1,37 @@
 #include "MenuRequestHandler.h"
 
-RequestResult signout(RequestInfo& request)
-{
-	//request.m_loggedUser = nullptr;
-}
-RequestResult getRooms(RequestInfo& request)
-{
-	JsonRequestPacketDeserializer::
 
+RequestResult MenuRequestHandler::signout(RequestInfo& request)
+{
+	return RequestResult();
 }
-RequestResult createRoom(RequestInfo& request);
-RequestResult joinRoom(RequestInfo& request);
-RequestResult getPlayerInRoom(RequestInfo& request);
-RequestResult getPersonalStats(RequestInfo& request);
-RequestResult getHighScores(RequestInfo& request);
+
+RequestResult MenuRequestHandler::getRooms(RequestInfo& request)
+{
+	return RequestResult();
+}
+
+RequestResult MenuRequestHandler::createRoom(RequestInfo& request)
+{
+	return RequestResult();
+}
+
+RequestResult MenuRequestHandler::joinRoom(RequestInfo& request)
+{
+	return RequestResult();
+}
+
+RequestResult MenuRequestHandler::getPlayerInRoom(RequestInfo& request)
+{
+	return RequestResult();
+}
+
+RequestResult MenuRequestHandler::getPersonalStats(RequestInfo& request)
+{
+	return RequestResult();
+}
+
+RequestResult MenuRequestHandler::getHighScores(RequestInfo& request)
+{
+	return RequestResult();
+}

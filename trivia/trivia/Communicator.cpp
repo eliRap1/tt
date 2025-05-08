@@ -102,7 +102,7 @@ void Communicator::handleNewClients(SOCKET c)
 				else
 				{
 					ErrorResponse err{ "Request not relevant to this handler" };
-					result.response = JsonResponsePacketSerializer::serializeErrorResponse(err);
+					result.response = JsonResponsePacketSerializer::serializeResponse(err);
 				}
 				// 5) send back the serialized response
 				send(c,

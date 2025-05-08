@@ -46,3 +46,38 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
     return buffer;
 }
 
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const LogoutResponse&)
+{
+	return std::vector<unsigned char>();
+}
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const GetRoomResponse&)
+{
+	return std::vector<unsigned char>();
+}
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const GetPlayersInRoomResponse&)
+{
+	return std::vector<unsigned char>();
+}
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const JoinRoomResponse&)
+{
+	return std::vector<unsigned char>();
+}
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const CreateRoomResponse&)
+{
+	return std::vector<unsigned char>();
+}
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const getHighScoresResponse&)
+{
+	return std::vector<unsigned char>();
+}
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const getPersonalStatsResponse&)
+{
+	return std::vector<unsigned char>();
+}
+

@@ -12,7 +12,7 @@ RequestResult LoginRequestHandler::handleRequest(RequestInfo& request)
 
 		// For now always succeed (status = 1)
 		LoginResponse response{ 1 };
-		result.response = JsonResponsePacketSerializer::serializeLoginResponse(response);
+		result.response = JsonResponsePacketSerializer::serializeResponse(response);
 	}
 	else if (request.id == SIGNUP_CODE)
 	{
@@ -22,13 +22,13 @@ RequestResult LoginRequestHandler::handleRequest(RequestInfo& request)
 
 		// For now always succeed (status = 1)
 		SignupResponse response{ 1 };
-		result.response = JsonResponsePacketSerializer::serializeSignupResponse(response);
+		result.response = JsonResponsePacketSerializer::serializeResponse(response);
 	}
 	else
 	{
 		// Error - unknown request
 		ErrorResponse error{ "Unknown request code." };
-		result.response = JsonResponsePacketSerializer::serializeErrorResponse(error);
+		result.response = JsonResponsePacketSerializer::serializeResponse(error);
 	}
 
 	// Placeholder for the next handler – replace with actual logic later
@@ -54,7 +54,7 @@ RequestResult LoginRequestHandler::login(RequestInfo& request)
 	if (status == LoginStatus::Success)
 	{
 		LoginResponse response{ LOGIN_CODE };
-		res.response = JsonResponsePacketSerializer::serializeLoginResponse(response);
+		res.response = JsonResponsePacketSerializer::serializeResponse(response);
 		//MenuRequestHandler* menuHandler = new MenuRequestHandler(); // Placeholder for the next handler – replace with actual logic late
 		res.newHandler = nullptr;
 	}
@@ -67,7 +67,7 @@ RequestResult LoginRequestHandler::login(RequestInfo& request)
 		else if(status == LoginStatus::DbError) errCode = "DbError"; // Placeholder for the next handler – replace with actual logic late ( sta)
 		else { errCode = "login error"; }
 		ErrorResponse error{ errCode };
-		res.response = JsonResponsePacketSerializer::serializeErrorResponse(error);
+		res.response = JsonResponsePacketSerializer::serializeResponse(error);
 		res.newHandler = nullptr;
 	}
 	return res;
@@ -86,7 +86,7 @@ RequestResult LoginRequestHandler::signup(RequestInfo& request)
 	if (status == SignUpStatus::Success)
 	{
 		LoginResponse response{ SIGNUP_CODE };
-		res.response = JsonResponsePacketSerializer::serializeLoginResponse(response);
+		res.response = JsonResponsePacketSerializer::serializeResponse(response);
 		//MenuRequestHandler* menuHandler = new MenuRequestHandler(); // Placeholder for the next handler – replace with actual logic late
 		res.newHandler = nullptr;
 	}
@@ -97,7 +97,7 @@ RequestResult LoginRequestHandler::signup(RequestInfo& request)
 		else if(status == SignUpStatus::DbError) errCode = "DbErrors";
 		else { errCode = "Signup error"; }
 		ErrorResponse error{ errCode };
-		res.response = JsonResponsePacketSerializer::serializeErrorResponse(error);
+		res.response = JsonResponsePacketSerializer::serializeResponse(error);
 		res.newHandler = nullptr;
 	}
 	return res;
