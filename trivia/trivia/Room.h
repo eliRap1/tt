@@ -8,6 +8,7 @@
 class Room
 {
 public:
+	Room() = default;
 	Room(const LoggedUser& user, const RoomData& metadata);
 	void addUser(const LoggedUser& user);
 	void removeUser(const LoggedUser& user);

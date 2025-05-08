@@ -3,7 +3,9 @@
 #include "LoginManager.h"
 #include "StatisticsManager.h"
 #include "RoomManager.h"
-#include "MenuRequestHandler.h"
+//#include "MenuRequestHandler.h"
+class MenuRequestHandler;
+class LoginRequestHandler;
 class RequestHandlerFactory
 {
 public:

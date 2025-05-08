@@ -106,7 +106,7 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo& request)
 RequestResult MenuRequestHandler::joinRoom(RequestInfo& request)
 {
 	auto req = JsonRequestPacketDeserializer::deserializeJoinRoomRequest(request.buffer);
-	m_handlerFactory.getRoomManager().joinRoom(req.roomId, m_loggedUser);
+	m_handlerFactory.getRoomManager().getRoom(req.roomId).addUser(m_loggedUser);
 
 	JoinRoomResponse response{ 1 };
 	return RequestResult{
@@ -122,7 +122,7 @@ RequestResult MenuRequestHandler::getPlayerInRoom(RequestInfo& request)
 	// getRoomState returns an unsigned int, so use getRoom(...) to fetch the Room,
 	// then pull its players list. We're assuming Room has a getPlayers() method.
 	Room& roomRef = m_handlerFactory.getRoomManager().getRoom(req.roomId);
-	auto const users = roomRef.getPlayers();
+	auto const users = roomRef.getUsers();
 
 	GetPlayersInRoomResponse response{ users };
 	return RequestResult{

@@ -14,9 +14,9 @@ Room& RoomManager::getRoom(int roomId)
 {
 	return this->m_rooms[roomId];
 }
-unsigned int RoomManager::getRoomState(int roomId)
+RoomStatus RoomManager::getRoomState(int roomId)
 {
-
+	return this->m_rooms[roomId].getRoomData().status;
 }
 std::vector<RoomData> RoomManager::getRooms()
 {
