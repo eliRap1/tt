@@ -1,32 +1,34 @@
 #include "RequestHandlerFactory.h"
-#include "LoginRequestHandler.h"
 
-RequestHandlerFactory::RequestHandlerFactory(IDatabase* database) : m_loginManager(database)
+RequestHandlerFactory::RequestHandlerFactory(IDatabase* database)
+	: m_database(database),
+	m_loginManager(database),
+	m_roomManager(),
+	m_StatisticsManager(database)
 {
-
-}
-
-LoginManager& RequestHandlerFactory::getLoginManager()
-{
-	return this->m_loginManager; 
 }
 
 IRequestHandler* RequestHandlerFactory::createLoginRequestHandler()
 {
-	return new LoginRequestHandler(*this);
+	return new IRequestHandler(m_loginManager);
 }
 
-MenuRequestHandler* RequestHandlerFactory::createMenuRequestHandler(LoggedUser& loggedUser)
+MenuRequestHandler* RequestHandlerFactory::createMenuRequestHandler(LoggedUser user)
 {
-    return nullptr;
+	return new MenuRequestHandler(user, *this);
 }
 
-StatisticsManager& RequestHandlerFactory::getStatisticsManager()
+LoginManager& RequestHandlerFactory::getLoginManager()
 {
-    // TODO: insert return statement here
+	return m_loginManager;
 }
 
 RoomManager& RequestHandlerFactory::getRoomManager()
 {
-    // TODO: insert return statement here
+	return m_roomManager;
+}
+
+StatisticsManager& RequestHandlerFactory::getStatisticsManager()
+{
+	return m_StatisticsManager;
 }
