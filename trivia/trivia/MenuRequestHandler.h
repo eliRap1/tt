@@ -10,6 +10,7 @@ private:
 	RequestHandlerFactory& m_handlerFactory;
 
 public:
+	MenuRequestHandler(const LoggedUser& user, RequestHandlerFactory& factory);
 	bool isRequestRelevant(RequestInfo& request) override;
 	RequestResult handleRequest(RequestInfo& request) override;
 private:

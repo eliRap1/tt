@@ -14,5 +14,8 @@ public:
 	RequestHandlerFactory(IDatabase* database);
 	LoginManager& getLoginManager();
 	IRequestHandler* createLoginRequestHandler();
+	//MenuRequestHandler* createMenuRequestHandler(LoggedUser& loggedUser);
+	//StatisticsManager& getStatisticsManager();
+	//RoomManager& getRoomManager();
 };
 
