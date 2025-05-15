@@ -7,7 +7,7 @@ MenuRequestHandler::MenuRequestHandler(const LoggedUser& user, RequestHandlerFac
 {
 }
 
-bool MenuRequestHandler::isRequestRelevant(RequestInfo& request)
+bool MenuRequestHandler::isRequestRelevant(const RequestInfo& request)
 {
 	return request.id >= LOGOUT_CODE && request.id <= PERSONAL_STATS_CODE;
 }

@@ -4,7 +4,7 @@ LoginRequestHandler::LoginRequestHandler(RequestHandlerFactory& handlerFactory) 
 
 
 
-RequestResult LoginRequestHandler::handleRequest(const RequestInfo& request)
+RequestResult LoginRequestHandler::handleRequest(RequestInfo& request)
 {
 	RequestResult result;
 
