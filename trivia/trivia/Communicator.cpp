@@ -50,7 +50,7 @@ void Communicator::startHandleRequests()
 	bindAndListen();
 }
 
-void Communicator::handleNewClients(SOCKET c)
+void Communicator::handleNewClients(const SOCKET& c)
 {
 	try
 	{

@@ -9,7 +9,7 @@ private:
 	RequestHandlerFactory m_handlerFactory;
 	Communicator m_communicator;  
 public:
-	Server(IDatabase* db, RequestHandlerFactory factory)
+	Server(IDatabase* db, RequestHandlerFactory& factory)
 		: m_database(db), m_handlerFactory(factory), m_communicator(factory) {}
 
 	void run();

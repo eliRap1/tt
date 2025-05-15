@@ -10,11 +10,11 @@ class LoginRequestHandler : public IRequestHandler
 public:
 	LoginRequestHandler(RequestHandlerFactory& handlerFactory);
 	//LoginRequestHandler(IDatabase* database);
-	RequestResult handleRequest(RequestInfo& request) override;
-	bool isRequestRelevant(RequestInfo& request) override;
+	RequestResult handleRequest(const RequestInfo& request) override;
+	bool isRequestRelevant(const RequestInfo& request) override;
 private:
 	RequestHandlerFactory& m_handlerFactory;
-	RequestResult login(RequestInfo& request);
-	RequestResult signup(RequestInfo& request);
+	RequestResult login(const RequestInfo& request);
+	RequestResult signup(const RequestInfo& request);
 };
 

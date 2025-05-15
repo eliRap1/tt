@@ -4,7 +4,7 @@ LoginRequestHandler::LoginRequestHandler(RequestHandlerFactory& handlerFactory) 
 
 
 
-RequestResult LoginRequestHandler::handleRequest(RequestInfo& request)
+RequestResult LoginRequestHandler::handleRequest(const RequestInfo& request)
 {
 	RequestResult result;
 
@@ -36,17 +36,17 @@ RequestResult LoginRequestHandler::handleRequest(RequestInfo& request)
 	}
 
 	// Placeholder for the next handler – replace with actual logic later
-	result.newHandler = nullptr;
+	result.newHandler = new LoginRequestHandler(this->m_handlerFactory);
 
 	return result;
 }
 
-bool LoginRequestHandler::isRequestRelevant(RequestInfo& request)
+bool LoginRequestHandler::isRequestRelevant(const RequestInfo& request)
 {
 	return request.id == LOGIN_CODE || request.id == SIGNUP_CODE;
 }
 
-RequestResult LoginRequestHandler::login(RequestInfo& request)
+RequestResult LoginRequestHandler::login(const RequestInfo& request)
 {
 	LoginRequest log;
 	LoginStatus status;
@@ -59,25 +59,24 @@ RequestResult LoginRequestHandler::login(RequestInfo& request)
 	{
 		LoginResponse response{ LOGIN_CODE };
 		res.response = JsonResponsePacketSerializer::serializeResponse(response);
-		//MenuRequestHandler* menuHandler = new MenuRequestHandler(); // Placeholder for the next handler – replace with actual logic late
-		res.newHandler = nullptr;
+		res.newHandler = this->m_handlerFactory.createMenuRequestHandler(username);
 	}
 	else
 	{
 		std::string errCode;
 		if(status == LoginStatus::UserNotExist) errCode = "UserNotExist";
-		else if(status == LoginStatus::WrongPassword) errCode = "WrongPassword"; // Placeholder for the next handler – replace with actual logic late ( sta)
-		else if(status == LoginStatus::AlreadyLoggedIn) errCode = "AlreadyLoggedIn"; // Placeholder for the next handler – replace with actual logic late ( s)
-		else if(status == LoginStatus::DbError) errCode = "DbError"; // Placeholder for the next handler – replace with actual logic late ( sta)
+		else if(status == LoginStatus::WrongPassword) errCode = "WrongPassword"; 
+		else if(status == LoginStatus::AlreadyLoggedIn) errCode = "AlreadyLoggedIn"; 
+		else if(status == LoginStatus::DbError) errCode = "DbError";
 		else { errCode = "login error"; }
 		ErrorResponse error{ errCode };
 		res.response = JsonResponsePacketSerializer::serializeResponse(error);
-		res.newHandler = nullptr;
+		res.newHandler = new LoginRequestHandler(this->m_handlerFactory);
 	}
 	return res;
 }
 
-RequestResult LoginRequestHandler::signup(RequestInfo& request)
+RequestResult LoginRequestHandler::signup(const RequestInfo& request)
 {
 	SignupRequest log;
 	SignUpStatus status;
@@ -91,8 +90,7 @@ RequestResult LoginRequestHandler::signup(RequestInfo& request)
 	{
 		LoginResponse response{ SIGNUP_CODE };
 		res.response = JsonResponsePacketSerializer::serializeResponse(response);
-		//MenuRequestHandler* menuHandler = new MenuRequestHandler(); // Placeholder for the next handler – replace with actual logic late
-		res.newHandler = nullptr;
+		res.newHandler = this->m_handlerFactory.createMenuRequestHandler(username);
 	}
 	else
 	{
@@ -102,7 +100,7 @@ RequestResult LoginRequestHandler::signup(RequestInfo& request)
 		else { errCode = "Signup error"; }
 		ErrorResponse error{ errCode };
 		res.response = JsonResponsePacketSerializer::serializeResponse(error);
-		res.newHandler = nullptr;
+		res.newHandler = new LoginRequestHandler(this->m_handlerFactory);
 	}
 	return res;
 }

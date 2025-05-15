@@ -36,11 +36,10 @@ LoginStatus LoginManager::login(const std::string& username, const std::string& 
 
 void LoginManager::logout(const std::string& username)
 {
-    m_loggedUsers.erase(
         std::remove_if(m_loggedUsers.begin(), m_loggedUsers.end(),
             [&username](const LoggedUser& user) {
                 return user.getUsername() == username;
-            }), m_loggedUsers.end());
+            });
 }
 
 bool LoginManager::isLoggedIn(const std::string& username)

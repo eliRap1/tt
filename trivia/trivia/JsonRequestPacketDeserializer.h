@@ -37,10 +37,10 @@ class JsonRequestPacketDeserializer
 {
 public:
 	
-	static LoginRequest deserializeLoginRequest(std::vector<unsigned char> buffer);
-	static SignupRequest deserializeSignupRequest(std::vector<unsigned char> buffer);
-	static GetPlayerInRoomRequest deserializeGetPlayerInRoomRequest(std::vector<unsigned char> buffer);
-	static JoinRoomRequest deserializeJoinRoomRequest(std::vector<unsigned char> buffer);
-	static CreateRoomRequest deserializeCreateRoomRequest(std::vector<unsigned char> buffer);
+	static LoginRequest deserializeLoginRequest(const std::vector<unsigned char>& buffer);
+	static SignupRequest deserializeSignupRequest(const std::vector<unsigned char>& buffer);
+	static GetPlayerInRoomRequest deserializeGetPlayerInRoomRequest(const std::vector<unsigned char>& buffer);
+	static JoinRoomRequest deserializeJoinRoomRequest(const std::vector<unsigned char>& buffer);
+	static CreateRoomRequest deserializeCreateRoomRequest(const std::vector<unsigned char>& buffer);
 };
 
