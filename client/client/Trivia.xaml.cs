@@ -42,6 +42,7 @@ namespace client
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
+            MainWindow.communicator.close();
             System.Windows.Application.Current.Shutdown();// shut down the application
         }
     }

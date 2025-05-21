@@ -136,8 +136,12 @@ void Communicator::handleNewClients(const SOCKET& c)
 	{
 		std::cerr << "Exception occurred with client socket: " << e.what() << std::endl;
 		closesocket(c);
-		delete this->m_clients[c];
-		this->m_clients.erase(c);
+		try
+		{
+			delete this->m_clients[c];
+			this->m_clients.erase(c);
+		}
+		catch (const std::exception& e) {}
 		std::cout << "Client disconnected" << std::endl;
 	}
 

@@ -40,7 +40,7 @@ namespace client
             {
 
                 byte[] request = Serializer.serializeLoginRequest(username, password);
-                byte[] response = Communicator.sendAndReceive(request);
+                byte[] response = MainWindow.communicator.sendAndReceive(request);
 
                 int status = Deserializer.extractStatus(response);
 

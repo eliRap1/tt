@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,9 +21,13 @@ namespace client
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static Communicator communicator;
         public MainWindow()
         {
             InitializeComponent();
+            TcpClient client = new TcpClient();
+            communicator = new Communicator(client);
+            communicator.connect();
         }
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
