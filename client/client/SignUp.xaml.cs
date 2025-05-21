@@ -24,5 +24,43 @@ namespace client
         {
             InitializeComponent();
         }
+
+        private void btnSignUp_Click(object sender, RoutedEventArgs e)
+        {
+            string username = txtUsername.Text.Trim();
+            string password = txtPassword.Password.Trim();
+            string email = txtEmail.Text.Trim();
+
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(email))
+            {
+                MessageBox.Show("Please fill in all fields.");
+                return;
+            }
+
+            try
+            {
+                byte[] request = Serializer.serializeSignupRequest(username, password, email);
+                byte[] response = Communicator.sendAndReceive(request);
+                int status = Deserializer.extractStatus(response);
+
+                if (status == 1)
+                {
+                    this.NavigationService?.Navigate(new Trivia());
+                }
+                else
+                {
+                    MessageBox.Show("Signup failed. Please try a different username or check your input.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
+
+    private void btnLogin_Click(object sender, RoutedEventArgs e)
+        {
+            SignuUpFrame.Navigate(new Login());
+        }
     }
 }

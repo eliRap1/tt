@@ -27,12 +27,41 @@ namespace client
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
+            string username = txtUsername.Text.Trim();
+            string password = txtPassword.Password.Trim();
 
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            {
+                MessageBox.Show("Please enter both username and password.");
+                return;
+            }
+
+            try
+            {
+
+                byte[] request = Serializer.serializeLoginRequest(username, password);
+                byte[] response = Communicator.sendAndReceive(request);
+
+                int status = Deserializer.extractStatus(response);
+
+                if (status == 1)
+                {
+                    this.NavigationService?.Navigate(new Trivia());
+                }
+                else
+                {
+                    MessageBox.Show("Login failed. Incorrect credentials.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
         }
 
         private void btnSignUp_Click(object sender, RoutedEventArgs e)
         {
-
+            LogInFrame.Navigate(new SignUp());
         }
     }
 }

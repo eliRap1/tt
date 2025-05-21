@@ -71,5 +71,6 @@
                 </StackPanel>
             </Grid>
         </Border>
+        <Frame x:Name="MainFrame"/>
     </Grid>
 </Window>

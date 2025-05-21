@@ -27,12 +27,12 @@ namespace client
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-
+            MainFrame.Navigate(new Login());
         }
 
         private void btnSignUp_Click(object sender, RoutedEventArgs e)
         {
-
+            MainFrame.Navigate(new SignUp());
         }
     }
 }

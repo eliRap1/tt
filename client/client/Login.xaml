@@ -94,5 +94,6 @@
                 </StackPanel>
             </Grid>
         </Border>
+        <Frame x:Name="LogInFrame"/>
     </Grid>
 </Page>
