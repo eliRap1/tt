@@ -14,6 +14,7 @@ bool MenuRequestHandler::isRequestRelevant(const RequestInfo& request)
 
 RequestResult MenuRequestHandler::handleRequest(RequestInfo& request)
 {
+	std::cout << "MenuRequestHandler::handleRequest" << std::endl;
 	switch (request.id)
 	{
 	case LOGOUT_CODE:

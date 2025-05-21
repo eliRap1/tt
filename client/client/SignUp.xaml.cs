@@ -43,7 +43,7 @@ namespace client
                 byte[] response = Communicator.sendAndReceive(request);
                 int status = Deserializer.extractStatus(response);
 
-                if (status == 1)
+                if (status == 2)
                 {
                     this.NavigationService?.Navigate(new Trivia());
                 }

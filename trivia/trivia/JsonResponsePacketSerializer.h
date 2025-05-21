@@ -7,8 +7,8 @@ using json = nlohmann::json;
 
 // --- ENUMS FOR RESPONSE CODES ---
 enum ResponseCode {
-	LOGIN_CODE = 1,
-	SIGNUP_CODE = 2,
+	LOGIN_RESPONSE = 1,
+	SIGNUP_RESPONSE = 2,
 	ERROR_CODE = 3,
 	LOGOUT_CODE = 4,
 	GET_ROOMS_CODE = 5,
