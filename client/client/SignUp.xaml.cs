@@ -45,7 +45,7 @@ namespace client
 
                 if (status == 2)
                 {
-                    this.NavigationService?.Navigate(new Trivia());
+                    SignuUpFrame.Navigate(new Trivia());
                 }
                 else
                 {

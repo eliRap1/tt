@@ -43,7 +43,7 @@ RequestResult MenuRequestHandler::handleRequest(RequestInfo& request)
 RequestResult MenuRequestHandler::signout(RequestInfo& request)
 {
 	m_handlerFactory.getLoginManager().logout(m_loggedUser.getUsername());
-	LogoutResponse response{ 1 };
+	LogoutResponse response{ LOGOUT_CODE };
 	return RequestResult{
 		JsonResponsePacketSerializer::serializeResponse(response),
 		m_handlerFactory.createLoginRequestHandler()

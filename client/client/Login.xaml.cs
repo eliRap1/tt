@@ -46,7 +46,7 @@ namespace client
 
                 if (status == 1)
                 {
-                    this.NavigationService?.Navigate(new Trivia());
+                    LogInFrame.Navigate(new Trivia());
                 }
                 else
                 {
