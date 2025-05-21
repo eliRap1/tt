@@ -24,5 +24,25 @@ namespace client
         {
             InitializeComponent();
         }
+
+        private void CreateRoom_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void JoinRoom_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Statistics_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Application.Current.Shutdown();// shut down the application
+        }
     }
 }

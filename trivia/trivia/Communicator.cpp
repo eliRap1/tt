@@ -59,6 +59,12 @@ void Communicator::handleNewClients(const SOCKET& c)
 		int clientIdleTime = 0;
 		while (clientIdleTime < 500)
 		{
+			char checkBuf;
+			int check = recv(c, &checkBuf, 1, MSG_PEEK);
+			if (check == 0 || check == SOCKET_ERROR)
+			{
+				throw std::runtime_error("client disconnected");
+			}
 			// 1) recv header (1 byte id + 4 bytes size)
 			unsigned char header[5];
 			int bytesRead = recv(c, reinterpret_cast<char*>(header), 5, 0);
