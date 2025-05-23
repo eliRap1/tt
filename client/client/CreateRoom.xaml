@@ -1,0 +1,66 @@
+﻿<Page x:Class="client.CreateRoom"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:client"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="CreateRoom">
+
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#FF0F2027" Offset="0.0"/>
+                <GradientStop Color="#FF203A43" Offset="0.5"/>
+                <GradientStop Color="#FF2C5364" Offset="1.0"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Border Width="500"
+                Padding="30"
+                Background="#F0F0F0"
+                CornerRadius="16"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+            <StackPanel >
+                <!-- כותרת -->
+                <TextBlock Text="Create Room"
+                           FontSize="26"
+                           FontWeight="Bold"
+                           Foreground="#2B2D42"
+                           HorizontalAlignment="Center"/>
+
+                <!-- room name -->
+                <StackPanel>
+                    <TextBlock Text="Room Name:" FontSize="16" Margin="0,0,0,5"/>
+                    <TextBox x:Name="RoomNameTextBox" Height="30" FontSize="14"/>
+                </StackPanel>
+
+                <!-- question time -->
+                <StackPanel>
+                    <TextBlock Text="Question Time (in seconds):" FontSize="16" Margin="0,10,0,5"/>
+                    <TextBox x:Name="QuestionTimeTextBox" Height="30" FontSize="14"/>
+                </StackPanel>
+
+                <!-- player num -->
+                <StackPanel>
+                    <TextBlock Text="Players Amount:" FontSize="16" Margin="0,10,0,5"/>
+                    <TextBox x:Name="PlayersAmountTextBox" Height="30" FontSize="14"/>
+                </StackPanel>
+
+                <!-- create btn -->
+                <Button Content="Create Room"
+                        Width="150"
+                        Height="40"
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        Background="#2196F3"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Margin="0,20,0,0"
+                        HorizontalAlignment="Center"
+                        Click="CreateRoom_Click"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Page>

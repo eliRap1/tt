@@ -9,7 +9,7 @@
       Title="Trivia">
 
     <Grid>
-        <!-- Futuristic gradient background -->
+        <!-- gradient background -->
         <Grid.Background>
             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                 <GradientStop Color="#FF0F2027" Offset="0.0"/>

@@ -56,6 +56,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Communicator.cs" />
+    <Compile Include="CreateRoom.xaml.cs">
+      <DependentUpon>CreateRoom.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Deserializer.cs" />
     <Compile Include="Serializer.cs" />
     <Compile Include="SignUp.xaml.cs">
@@ -64,6 +67,10 @@
     <Compile Include="Trivia.xaml.cs">
       <DependentUpon>Trivia.xaml</DependentUpon>
     </Compile>
+    <Page Include="CreateRoom.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Login.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

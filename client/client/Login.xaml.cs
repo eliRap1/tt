@@ -20,6 +20,7 @@ namespace client
     /// </summary>
     public partial class Login : Page
     {
+        public static string user;
         public Login()
         {
             InitializeComponent();
@@ -29,7 +30,7 @@ namespace client
         {
             string username = txtUsername.Text.Trim();
             string password = txtPassword.Password.Trim();
-
+            
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
                 MessageBox.Show("Please enter both username and password.");
@@ -46,6 +47,7 @@ namespace client
 
                 if (status == 1)
                 {
+                    user = username;
                     LogInFrame.Navigate(new Trivia());
                 }
                 else

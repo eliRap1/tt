@@ -31,7 +31,7 @@ void Communicator::bindAndListen()
 		SOCKET clientSocket = accept(this->m_serverSocket, NULL, NULL);
 		if (clientSocket == INVALID_SOCKET)
 		{
-			//std::cout << "Accept failed" << std::endl;
+			std::cout << "Accept failed" << std::endl;
 		}
 		else
 		{
@@ -136,12 +136,12 @@ void Communicator::handleNewClients(const SOCKET& c)
 	{
 		std::cerr << "Exception occurred with client socket: " << e.what() << std::endl;
 		closesocket(c);
-		try
-		{
-			delete this->m_clients[c];
-			this->m_clients.erase(c);
-		}
-		catch (const std::exception& e) {}
+		//try
+		//{
+		//	delete this->m_clients[c];
+		//	this->m_clients.erase(c);
+		//}
+		//catch (const std::exception& e) {}
 		std::cout << "Client disconnected" << std::endl;
 	}
 

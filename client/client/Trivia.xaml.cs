@@ -42,6 +42,8 @@ namespace client
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
+            byte[] request = Serializer.serializeLogoutRequest(Login.user);
+            byte[] response = MainWindow.communicator.sendAndReceive(request);
             MainWindow.communicator.close();
             System.Windows.Application.Current.Shutdown();// shut down the application
         }

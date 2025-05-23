@@ -44,6 +44,7 @@ RequestResult MenuRequestHandler::signout(RequestInfo& request)
 {
 	m_handlerFactory.getLoginManager().logout(m_loggedUser.getUsername());
 	LogoutResponse response{ LOGOUT_CODE };
+	std::cout << "MenuRequestHandler::signout" << std::endl;
 	return RequestResult{
 		JsonResponsePacketSerializer::serializeResponse(response),
 		m_handlerFactory.createLoginRequestHandler()
@@ -82,7 +83,7 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo& request)
 {
 	auto req = JsonRequestPacketDeserializer::deserializeCreateRoomRequest(request.buffer);
 
-	// generate a new unique ID *here*, since RoomManager has no generateRoomId()
+	// generate a new unique ID *here*
 	unsigned int newId = 1;
 	auto existing = m_handlerFactory.getRoomManager().getRooms();
 	for (auto const& rd : existing)

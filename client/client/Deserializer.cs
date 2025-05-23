@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace client
 {
@@ -14,7 +15,13 @@ namespace client
             string key = "\"status\":";
             int index = json.IndexOf(key);
             if (index == -1)
-                throw new Exception("Status field not found in response");
+            {
+                key = "\"message\"";
+                string message = json.Substring(json.IndexOf(key) + key.Length + 2);
+                message = message.Substring(0, message.IndexOf("\""));
+                throw new Exception(message);
+            }
+                
 
             index += key.Length;
             string number = "";
@@ -28,7 +35,6 @@ namespace client
             {
                 return status;
             }
-
             throw new Exception("Invalid status value in response");
         }
     }
