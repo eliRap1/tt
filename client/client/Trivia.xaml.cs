@@ -27,12 +27,12 @@ namespace client
 
         private void CreateRoom_Click(object sender, RoutedEventArgs e)
         {
-
+            MainFrame.Navigate(new CreateRoom());
         }
 
         private void JoinRoom_Click(object sender, RoutedEventArgs e)
         {
-
+            MainFrame.Navigate(new JoinRoom());
         }
 
         private void Statistics_Click(object sender, RoutedEventArgs e)
@@ -47,5 +47,6 @@ namespace client
             MainWindow.communicator.close();
             System.Windows.Application.Current.Shutdown();// shut down the application
         }
+
     }
 }

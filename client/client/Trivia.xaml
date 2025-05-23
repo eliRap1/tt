@@ -78,5 +78,6 @@
                         Click="Exit_Click"/>
             </StackPanel>
         </Border>
+        <Frame x:Name="MainFrame" Grid.ColumnSpan="100" Grid.RowSpan="100"/>
     </Grid>
 </Page>

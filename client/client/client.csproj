@@ -60,6 +60,9 @@
       <DependentUpon>CreateRoom.xaml</DependentUpon>
     </Compile>
     <Compile Include="Deserializer.cs" />
+    <Compile Include="JoinRoom.xaml.cs">
+      <DependentUpon>JoinRoom.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Serializer.cs" />
     <Compile Include="SignUp.xaml.cs">
       <DependentUpon>SignUp.xaml</DependentUpon>
@@ -68,6 +71,10 @@
       <DependentUpon>Trivia.xaml</DependentUpon>
     </Compile>
     <Page Include="CreateRoom.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JoinRoom.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
