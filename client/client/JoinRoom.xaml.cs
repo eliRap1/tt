@@ -26,15 +26,15 @@ namespace client
             byte[] request = Serializer.serializeGetRoomsRequest();
             byte[] response = MainWindow.communicator.sendAndReceive(request);
 
-            List<Room> rooms = Deserializer.DeserializeGetRoomsResponse(response);
+            List<RoomInfo> rooms = Deserializer.DeserializeGetRoomsResponse(response);
 
             foreach (var room in rooms)
             {
-                AddRoomCard(room.name, room.maxPlayers);
+                AddRoomCard(room);
             }
 
         }
-        private void AddRoomCard(string roomName, int maxPlayers)
+        private void AddRoomCard(RoomInfo room)
         {
             // create card container
             Border roomCard = new Border
@@ -53,14 +53,14 @@ namespace client
             StackPanel textPanel = new StackPanel();
             TextBlock nameText = new TextBlock
             {
-                Text = $"Room Name: {roomName}",
+                Text = $"Room Name: {room.name}",
                 FontSize = 20,
                 FontWeight = FontWeights.Bold,
                 Foreground = Brushes.Navy
             };
             TextBlock playersText = new TextBlock
             {
-                Text = $"Max Players: {maxPlayers} / {maxPlayers}",
+                Text = $"Max Players: {room.maxPlayers}",
                 FontSize = 14,
                 Foreground = Brushes.Gray
             };
@@ -84,8 +84,17 @@ namespace client
             };
             joinButton.Click += (sender, eventArgs) =>
             {
-                MessageBox.Show($"Joining room: {roomName}");
-                // TODO: Add join logic
+                MessageBox.Show($"Joining room: {room.name}");
+                byte[] request = Serializer.SearalizeJoinRoomRequest(room.id);
+                byte[] response = MainWindow.communicator.sendAndReceive(request);
+                if(Deserializer.extractStatus(response) == 1)
+                {
+                    JoinRoomFrame.Navigate(new Room(room));
+                }
+                else
+                {
+                    MessageBox.Show("Error joining room");
+                }
             };
             DockPanel.SetDock(joinButton, Dock.Right);
 

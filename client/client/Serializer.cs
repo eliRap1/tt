@@ -104,5 +104,38 @@ namespace client
             Buffer.BlockCopy(jsonBytes, 0, packet, 5, jsonBytes.Length);
             return packet;
         }
+        public static byte[] SearalizeJoinRoomRequest(int id)
+        {
+            string json = "{"
+                        + "\"roomId\":\"" + id + "\""
+                        + "}";
+            byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
+            int length = jsonBytes.Length;
+            byte[] packet = new byte[1 + 4 + jsonBytes.Length];
+            packet[0] = JOIN_ROOM_CODE;
+            packet[1] = (byte)((length >> 24) & 0xFF);
+            packet[2] = (byte)((length >> 16) & 0xFF);
+            packet[3] = (byte)((length >> 8) & 0xFF);
+            packet[4] = (byte)(length & 0xFF);
+            Buffer.BlockCopy(jsonBytes, 0, packet, 5, jsonBytes.Length);
+            return packet;
+        }
+        public static byte[] SearalizeGetPlayersInRoomRequest(int id)
+        {
+            string json = "{"
+                        + "\"roomId\":\"" + id + "\""
+                        + "}";
+            byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
+            int length = jsonBytes.Length;
+            byte[] packet = new byte[1 + 4 + jsonBytes.Length];
+            packet[0] = GET_PLAYERS_IN_ROOM_CODE;
+            packet[1] = (byte)((length >> 24) & 0xFF);
+            packet[2] = (byte)((length >> 16) & 0xFF);
+            packet[3] = (byte)((length >> 8) & 0xFF);
+            packet[4] = (byte)(length & 0xFF);
+            Buffer.BlockCopy(jsonBytes, 0, packet, 5, jsonBytes.Length);
+            return packet;
+        }
+
     }
 }

@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace client
 {
-    public class Room
+    public class RoomInfo
     {
         public int id { get; set; }
         public string name { get; set; }
@@ -22,7 +22,13 @@ namespace client
     public class GetRoomsResponse
     {
         public int status { get; set; }
-        public List<Room> rooms { get; set; }
+        public List<RoomInfo> rooms { get; set; }
+    }
+
+    public class GetPlayersInRoomResponse
+    {
+        [JsonProperty("players")]
+        public List<string> Players { get; set; }
     }
     public class Deserializer
     {
@@ -54,11 +60,11 @@ namespace client
             }
             throw new Exception("Invalid status value in response");
         }
-        public static List<Room> DeserializeGetRoomsResponse(byte[] responseData)
+        public static List<RoomInfo> DeserializeGetRoomsResponse(byte[] responseData)
         {
             const int headerSize = 5; // 4 byte fot json
             if (responseData.Length <= headerSize)
-                return new List<Room>(); // not right response
+                return new List<RoomInfo>(); // not right response
             
             byte[] jsonBytes = responseData.Skip(headerSize).ToArray(); // skip the header
 
@@ -67,14 +73,36 @@ namespace client
             try
             {
                 var response = JsonConvert.DeserializeObject<GetRoomsResponse>(json);
-                return response?.rooms ?? new List<Room>();
+                return response?.rooms ?? new List<RoomInfo>();
             }
             catch (Exception e)
             {
                 MessageBox.Show($"error:{e.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return new List<Room>();
+                return new List<RoomInfo>();
             }
         }
+        public static List<string> DeserializeGetPlayersInRoomResponse(byte[] responseData)
+        {
+            const int headerSize = 5; // Skip the header (e.g., message type + length)
+
+            if (responseData.Length <= headerSize)
+                return new List<string>(); // Invalid response
+
+            try
+            {
+                byte[] jsonBytes = responseData.Skip(headerSize).ToArray();
+                string json = Encoding.UTF8.GetString(jsonBytes);
+
+                var response = JsonConvert.DeserializeObject<GetPlayersInRoomResponse>(json);
+                return response?.Players ?? new List<string>();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"Error while deserializing: {e.Message}", "Deserialization Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return new List<string>();
+            }
+        }
+
 
     }
 }
