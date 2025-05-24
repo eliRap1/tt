@@ -117,7 +117,7 @@ void Communicator::handleNewClients(const SOCKET& c)
 					0);
 
 				// 6) switch to a new handler if one was returned
-				if (result.newHandler != nullptr)
+				if (result.newHandler != nullptr && result.newHandler != currentHandler)
 				{
 					delete currentHandler;
 					currentHandler = result.newHandler;
