@@ -56,18 +56,25 @@ namespace client
         }
         public static List<Room> DeserializeGetRoomsResponse(byte[] responseData)
         {
-            string json = Encoding.UTF8.GetString(responseData);
-            var response = new GetRoomsResponse();
+            const int headerSize = 5; // 4 byte fot json
+            if (responseData.Length <= headerSize)
+                return new List<Room>(); // not right response
+            
+            byte[] jsonBytes = responseData.Skip(headerSize).ToArray(); // skip the header
+
+            string json = Encoding.UTF8.GetString(jsonBytes);
+
             try
             {
-                response = JsonConvert.DeserializeObject<GetRoomsResponse>(json);
+                var response = JsonConvert.DeserializeObject<GetRoomsResponse>(json);
+                return response?.rooms ?? new List<Room>();
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"error:{e.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return new List<Room>();
             }
-            return response?.rooms ?? new List<Room>();
         }
+
     }
 }
