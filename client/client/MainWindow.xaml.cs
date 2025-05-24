@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -28,6 +29,7 @@ namespace client
             TcpClient client = new TcpClient();
             communicator = new Communicator(client);
             communicator.connect();
+            Closing += MainWindow_Closing;
         }
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
@@ -38,6 +40,13 @@ namespace client
         private void btnSignUp_Click(object sender, RoutedEventArgs e)
         {
             MainFrame.Navigate(new SignUp());
+        }
+        private async void MainWindow_Closing(object sender, CancelEventArgs e)
+        {
+            e.Cancel = true;
+            communicator.sendAndReceive(Serializer.serializeLogoutRequest(Login.user));
+            e.Cancel = false;
+
         }
     }
 }
