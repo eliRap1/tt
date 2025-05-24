@@ -41,7 +41,11 @@
                     <TextBlock Text="Question Time (in seconds):" FontSize="16" Margin="0,10,0,5"/>
                     <TextBox x:Name="QuestionTimeTextBox" Height="30" FontSize="14"/>
                 </StackPanel>
-
+                
+                <StackPanel>
+                    <TextBlock Text="Question Amount:" FontSize="16" Margin="0,10,0,5"/>
+                    <TextBox x:Name="QuestionAmount" Height="30" FontSize="14"/>
+                </StackPanel>
                 <!-- player num -->
                 <StackPanel>
                     <TextBlock Text="Players Amount:" FontSize="16" Margin="0,10,0,5"/>
@@ -62,5 +66,6 @@
                         Click="CreateRoom_Click"/>
             </StackPanel>
         </Border>
+        <Frame x:Name="JoinRoomFrame"/>
     </Grid>
 </Page>

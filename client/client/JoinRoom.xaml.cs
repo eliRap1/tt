@@ -23,9 +23,18 @@ namespace client
         public JoinRoom()
         {
             InitializeComponent();
-            AddRoomCard("Trivia", 3, 6);
+            byte[] request = Serializer.serializeGetRoomsRequest();
+            byte[] response = MainWindow.communicator.sendAndReceive(request);
+
+            List<Room> rooms = Deserializer.DeserializeGetRoomsResponse(response);
+
+            foreach (var room in rooms)
+            {
+                AddRoomCard(room.name, room.maxPlayers);
+            }
+
         }
-        private void AddRoomCard(string roomName, int currentPlayers, int maxPlayers)
+        private void AddRoomCard(string roomName, int maxPlayers)
         {
             // create card container
             Border roomCard = new Border
@@ -51,7 +60,7 @@ namespace client
             };
             TextBlock playersText = new TextBlock
             {
-                Text = $"Players: {currentPlayers} / {maxPlayers}",
+                Text = $"Max Players: {maxPlayers} / {maxPlayers}",
                 FontSize = 14,
                 Foreground = Brushes.Gray
             };

@@ -71,5 +71,38 @@ namespace client
             Buffer.BlockCopy(jsonBytes, 0, packet, 5, jsonBytes.Length);
             return packet;
         }
+        public static byte[] serializeGetRoomsRequest()
+        {
+            string json = "{}";
+            byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
+            int length = jsonBytes.Length;
+            byte[] packet = new byte[1 + 4 + jsonBytes.Length];
+            packet[0] = GET_ROOMS_CODE;
+            packet[1] = (byte)((length >> 24) & 0xFF);
+            packet[2] = (byte)((length >> 16) & 0xFF);
+            packet[3] = (byte)((length >> 8) & 0xFF);
+            packet[4] = (byte)(length & 0xFF);
+            Buffer.BlockCopy(jsonBytes, 0, packet, 5, jsonBytes.Length);
+            return packet;
+        }
+        public static byte[] SearalizeCreateRoomRequest(int maxUsers, int answerTimeout, string roomName, int QuestionsCount)
+        {
+            string json = "{"
+                        + "\"maxUsers\":" + maxUsers + ","
+                        + "\"answerTimeout\":" + answerTimeout + ","
+                        + "\"roomName\":\"" + roomName + "\","
+                        + "\"QuestionsCount\":" + QuestionsCount
+                        + "}";
+            byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
+            int length = jsonBytes.Length;
+            byte[] packet = new byte[1 + 4 + jsonBytes.Length];
+            packet[0] = CREATE_ROOM_CODE;
+            packet[1] = (byte)((length >> 24) & 0xFF);
+            packet[2] = (byte)((length >> 16) & 0xFF);
+            packet[3] = (byte)((length >> 8) & 0xFF);
+            packet[4] = (byte)(length & 0xFF);
+            Buffer.BlockCopy(jsonBytes, 0, packet, 5, jsonBytes.Length);
+            return packet;
+        }
     }
 }

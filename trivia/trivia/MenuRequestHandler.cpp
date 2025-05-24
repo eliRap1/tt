@@ -70,8 +70,6 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo& request)
 		roomsJson.push_back(j);
 	}
 
-	// 3) return that vector directly—GetRoomResponse is declared as
-	//    GetRoomResponse(int status, std::vector<nlohmann::json> rooms);
 	GetRoomResponse response{ 1, roomsJson };
 	return RequestResult{
 		JsonResponsePacketSerializer::serializeResponse(response),

@@ -5,8 +5,25 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
+using Newtonsoft.Json;
+
+
 namespace client
 {
+    public class Room
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+        public int maxPlayers { get; set; }
+        public int numOfQuestionsInGame { get; set; }
+        public int timePerQuestion { get; set; }
+    }
+
+    public class GetRoomsResponse
+    {
+        public int status { get; set; }
+        public List<Room> rooms { get; set; }
+    }
     public class Deserializer
     {
         public static int extractStatus(byte[] responseData)
@@ -36,6 +53,21 @@ namespace client
                 return status;
             }
             throw new Exception("Invalid status value in response");
+        }
+        public static List<Room> DeserializeGetRoomsResponse(byte[] responseData)
+        {
+            string json = Encoding.UTF8.GetString(responseData);
+            var response = new GetRoomsResponse();
+            try
+            {
+                response = JsonConvert.DeserializeObject<GetRoomsResponse>(json);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return new List<Room>();
+            }
+            return response?.rooms ?? new List<Room>();
         }
     }
 }

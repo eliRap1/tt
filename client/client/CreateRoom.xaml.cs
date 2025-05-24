@@ -27,7 +27,15 @@ namespace client
 
         private void CreateRoom_Click(object sender, RoutedEventArgs e)
         {
+            byte[] request = Serializer.SearalizeCreateRoomRequest(int.Parse(PlayersAmountTextBox.Text), int.Parse(QuestionTimeTextBox.Text), RoomNameTextBox.Text, int.Parse(QuestionAmount.Text));
+            byte[] response = MainWindow.communicator.sendAndReceive(request);
+            int status = Deserializer.extractStatus(response);
 
+            if (status == 1)
+            {
+                MessageBox.Show("Room created successfully!");
+                JoinRoomFrame.Navigate(new JoinRoom());
+            }
         }
     }
 }

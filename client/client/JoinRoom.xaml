@@ -9,7 +9,7 @@
       Title="JoinRoom"
       Background="#FF1E1F4B">
 
-    <Grid Margin="30">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>

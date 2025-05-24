@@ -4,6 +4,7 @@ void RoomManager::createRoom(const LoggedUser& user, const RoomData& roomData)
 {
 	Room room(user,roomData);
 	this->m_rooms[roomData.id] = room;
+
 }
 
 void RoomManager::deleteRoom(const int roomId)
