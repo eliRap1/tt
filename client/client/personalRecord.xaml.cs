@@ -94,5 +94,10 @@ namespace client
             card.Child = block;
             StatsPanel.Children.Add(card);
         }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+             frame.Navigate(new Statistics());
+        }
     }
 }

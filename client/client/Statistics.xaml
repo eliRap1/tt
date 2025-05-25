@@ -22,18 +22,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Button Content="← Back"
-                Click="BackButton_Click"
-                Width="100"
-                Height="35"
-                Background="#FF3E8EDE"
-                Foreground="White"
-                FontWeight="Bold"
-                BorderThickness="0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Margin="20"
-                Cursor="Hand"/>
         <Grid x:Name="menuPanel" Grid.Row="1">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
                 <TextBlock Text="Statistics Menu"
@@ -56,8 +44,19 @@
                         Click="HighScores_Click"/>
             </StackPanel>
         </Grid>
+        <Button Content="← Back"
+        Click="BackButton_Click"
+        Width="100"
+        Height="35"
+        Background="#FF3E8EDE"
+        Foreground="White"
+        FontWeight="Bold"
+        BorderThickness="0"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Top"
+        Margin="20"
+        Cursor="Hand"/>
         <Frame x:Name="statisticsFrame"
-       Grid.Row="1"
-       NavigationUIVisibility="Hidden" />
+       NavigationUIVisibility="Hidden" Grid.RowSpan="4"/>
     </Grid>
 </Page>
