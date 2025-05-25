@@ -89,5 +89,6 @@
                 FontWeight="Bold"
                 BorderThickness="0"
                 Cursor="Hand"/>
+        <Frame x:Name="triviaF"/>
     </Grid>
 </Page>

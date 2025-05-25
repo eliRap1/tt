@@ -65,7 +65,19 @@
                         HorizontalAlignment="Center"
                         Click="CreateRoom_Click"/>
             </StackPanel>
+            
         </Border>
+        <Button Content="Back"
+                Width="80"
+                Height="35"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Margin="10"
+                Click="Back_Click"
+                Background="#2196F3"
+                Foreground="White"
+                FontWeight="Bold"
+                BorderThickness="0"/>
         <Frame x:Name="JoinRoomFrame"/>
     </Grid>
 </Page>

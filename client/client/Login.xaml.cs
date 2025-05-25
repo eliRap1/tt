@@ -21,6 +21,7 @@ namespace client
     public partial class Login : Page
     {
         public static string user;
+        public static string pass;
         public Login()
         {
             InitializeComponent();
@@ -48,6 +49,7 @@ namespace client
                 if (status == 1)
                 {
                     user = username;
+                    pass = password;
                     LogInFrame.Navigate(new Trivia());
                 }
                 else

@@ -37,6 +37,7 @@ namespace client
         private void AddRoomCard(RoomInfo room)
         {
             // create card container
+            int currPlayers = Room.CheckPlayersList(room.id);
             Border roomCard = new Border
             {
                 Background = Brushes.White,
@@ -58,14 +59,21 @@ namespace client
                 FontWeight = FontWeights.Bold,
                 Foreground = Brushes.Navy
             };
+            TextBlock idText = new TextBlock
+            {
+                Text = $"Room ID: {room.id}",
+                FontSize = 14,
+                Foreground = Brushes.Gray
+            };
             TextBlock playersText = new TextBlock
             {
-                Text = $"Max Players: {room.maxPlayers}",
+                Text = $"Players: {currPlayers} / {room.maxPlayers}",
                 FontSize = 14,
                 Foreground = Brushes.Gray
             };
 
             textPanel.Children.Add(nameText);
+            textPanel.Children.Add(idText);
             textPanel.Children.Add(playersText);
             DockPanel.SetDock(textPanel, Dock.Left);
 
@@ -84,6 +92,11 @@ namespace client
             };
             joinButton.Click += (sender, eventArgs) =>
             {
+                if(currPlayers >= room.maxPlayers)
+                {
+                    MessageBox.Show("Room is full!");
+                    return;
+                }
                 MessageBox.Show($"Joining room: {room.name}");
                 byte[] request = Serializer.SearalizeJoinRoomRequest(room.id);
                 byte[] response = MainWindow.communicator.sendAndReceive(request);

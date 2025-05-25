@@ -83,10 +83,10 @@ namespace client
         }
         public static List<string> DeserializeGetPlayersInRoomResponse(byte[] responseData)
         {
-            const int headerSize = 5; // Skip the header (e.g., message type + length)
+            const int headerSize = 5; // skip the header
 
             if (responseData.Length <= headerSize)
-                return new List<string>(); // Invalid response
+                return new List<string>(); // invalid response
 
             try
             {
@@ -98,7 +98,7 @@ namespace client
             }
             catch (Exception e)
             {
-                MessageBox.Show($"Error while deserializing: {e.Message}", "Deserialization Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error while deserializing: {e.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return new List<string>();
             }
         }

@@ -37,7 +37,7 @@ namespace client
 
         private void Statistics_Click(object sender, RoutedEventArgs e)
         {
-
+            //TO DO (IDAN)
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)

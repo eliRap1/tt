@@ -42,6 +42,11 @@ RequestResult MenuRequestHandler::handleRequest(RequestInfo& request)
 
 RequestResult MenuRequestHandler::signout(RequestInfo& request)
 {
+	auto rooms = m_handlerFactory.getRoomManager().getRooms();
+	for (auto const& room : rooms)
+	{
+		m_handlerFactory.getRoomManager().getRoom(room.id).removeUser(m_loggedUser); // also disconnect from the rooms
+	}
 	m_handlerFactory.getLoginManager().logout(m_loggedUser.getUsername());
 	LogoutResponse response{ LOGOUT_CODE };
 	std::cout << "MenuRequestHandler::signout" << std::endl;

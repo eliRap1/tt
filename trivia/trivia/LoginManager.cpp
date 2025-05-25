@@ -43,6 +43,7 @@ void LoginManager::logout(const std::string& username)
 			}),
 		m_loggedUsers.end()
 	);
+
 }
 
 
