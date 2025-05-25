@@ -85,6 +85,7 @@
     <Compile Include="Trivia.xaml.cs">
       <DependentUpon>Trivia.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ValidationRules.cs" />
     <Page Include="CreateRoom.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
