@@ -37,7 +37,7 @@ namespace client
 
         private void Statistics_Click(object sender, RoutedEventArgs e)
         {
-            //TO DO (IDAN)
+            MainFrame.Navigate(new Statistics());
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
@@ -47,6 +47,5 @@ namespace client
             MainWindow.communicator.close();
             System.Windows.Application.Current.Shutdown();// shut down the application
         }
-
     }
 }

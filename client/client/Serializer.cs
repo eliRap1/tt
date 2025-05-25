@@ -136,6 +136,24 @@ namespace client
             Buffer.BlockCopy(jsonBytes, 0, packet, 5, jsonBytes.Length);
             return packet;
         }
-
+        /*
+         this is for simple requests that are for just showing something simple like statistics or all time winners and it goes on the same build of all the others
+        input: code
+        output: packet
+        */
+        public static byte[] SerializeSimpleRequest(byte code)
+        {
+            string json = "{}";
+            byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
+            int length = jsonBytes.Length;
+            byte[] packet = new byte[1 + 4 + jsonBytes.Length];
+            packet[0] = code;
+            packet[1] = (byte)((length >> 24) & 0xFF);
+            packet[2] = (byte)((length >> 16) & 0xFF);
+            packet[3] = (byte)((length >> 8) & 0xFF);
+            packet[4] = (byte)(length & 0xFF);
+            Buffer.BlockCopy(jsonBytes, 0, packet, 5, jsonBytes.Length);
+            return packet;
+        }
     }
 }
