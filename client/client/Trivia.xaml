@@ -78,6 +78,6 @@
                         Click="Exit_Click"/>
             </StackPanel>
         </Border>
-        <Frame x:Name="MainFrame"/>
+        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Page>

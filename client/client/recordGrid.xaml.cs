@@ -85,5 +85,10 @@ namespace client
             card.Child = block;
             HighScoresPanel.Children.Add(card); 
         }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            statisticsFrame.Navigate(new Statistics());
+        }
     }
 }

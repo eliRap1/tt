@@ -78,6 +78,6 @@
                 Foreground="White"
                 FontWeight="Bold"
                 BorderThickness="0"/>
-        <Frame x:Name="JoinRoomFrame"/>
+        <Frame x:Name="JoinRoomFrame" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Page>

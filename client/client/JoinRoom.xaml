@@ -41,6 +41,6 @@
                 <!-- Repeat more Border blocks for other rooms -->
             </StackPanel>
         </ScrollViewer>
-        <Frame x:Name="JoinRoomFrame" Grid.ColumnSpan="100" Grid.RowSpan="100"/>
+        <Frame x:Name="JoinRoomFrame" Grid.ColumnSpan="100" Grid.RowSpan="100" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Page>
