@@ -23,35 +23,21 @@ namespace client
         public Statistics()
         {
             InitializeComponent();
-            statisticsFrame.NavigationUIVisibility = System.Windows.Navigation.NavigationUIVisibility.Hidden;
-            statisticsFrame.Visibility = Visibility.Collapsed;
         }
 
         private void HighScores_Click(object sender, RoutedEventArgs e)
         {
-            menuPanel.Visibility = Visibility.Collapsed;
-            statisticsFrame.Visibility = Visibility.Visible;
             statisticsFrame.Navigate(new recordGrid());
         }
 
         private void PersonalStats_Click(object sender, RoutedEventArgs e)
         {
-            menuPanel.Visibility = Visibility.Collapsed;
-            statisticsFrame.Visibility = Visibility.Visible;
             statisticsFrame.Navigate(new personalRecord());
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            if (statisticsFrame.CanGoBack)
-            {
-                statisticsFrame.GoBack();
-            }
-            else
-            {
-                menuPanel.Visibility = Visibility.Visible;
-                statisticsFrame.Visibility = Visibility.Collapsed;
-            }
+            statisticsFrame.Navigate(new Trivia());
         }   
     }
 }

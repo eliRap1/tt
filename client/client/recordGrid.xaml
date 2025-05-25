@@ -26,5 +26,19 @@
                 <StackPanel x:Name="HighScoresPanel" />
             </StackPanel>
         </ScrollViewer>
+        <Button Content="← Back"
+                Click="BackButton_Click"
+                Width="100"
+                Height="35"
+                Background="#FF3E8EDE"
+                Foreground="White"
+                FontWeight="Bold"
+                BorderThickness="0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="20"/>
+<Frame x:Name="statisticsFrame"
+               NavigationUIVisibility="Hidden" Grid.RowSpan="4"/>
+
     </Grid>
 </Page>
