@@ -55,7 +55,13 @@
                              FontSize="14"
                              Padding="6"
                              BorderBrush="#FF00BFFF"
-                             BorderThickness="1"/>
+                             BorderThickness="1">
+                        <Binding Path="Username" ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <local:UsernameValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox>
                 </StackPanel>
 
                 <!-- Email -->
@@ -66,7 +72,14 @@
                              FontSize="14"
                              Padding="6"
                              BorderBrush="#FF00BFFF"
-                             BorderThickness="1"/>
+                             BorderThickness="1">
+                        <Binding Path="Email" ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <local:EmailValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox>
+
                 </StackPanel>
 
                 <!-- Password -->

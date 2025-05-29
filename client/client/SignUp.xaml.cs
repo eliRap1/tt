@@ -14,14 +14,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
 namespace client
 {
     public partial class SignUp : Page
     {
+        private User user;
         public SignUp()
         {
             InitializeComponent();
+            user = new User();
+            this.DataContext = user;
         }
 
         private void txtPassword_PasswordChanged(object sender, RoutedEventArgs e)
@@ -41,8 +43,8 @@ namespace client
 
         private void btnSignUp_Click(object sender, RoutedEventArgs e)
         {
-            if (Validation.GetHasError(txtUsername) ||
-                Validation.GetHasError(txtEmail) ||
+            if (Validation.GetHasError(txtEmail) ||
+                Validation.GetHasError(txtUsername) ||
                 txtPassword.Tag?.ToString() == "error")
             {
                 MessageBox.Show("Please correct the highlighted fields.");
@@ -51,11 +53,11 @@ namespace client
 
             string username = txtUsername.Text.Trim();
             string password = txtPassword.Password.Trim();
-            string email = txtEmail.Text.Trim();
+            string email1 = txtEmail.Text.Trim();
 
             try
             {
-                byte[] request = Serializer.serializeSignupRequest(username, password, email);
+                byte[] request = Serializer.serializeSignupRequest(username, password, email1);
                 byte[] response = MainWindow.communicator.sendAndReceive(request);
                 int status = Deserializer.extractStatus(response);
 
@@ -76,6 +78,7 @@ namespace client
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
+            this.DataContext = null;
             SignuUpFrame.Navigate(new Login());
         }
     }

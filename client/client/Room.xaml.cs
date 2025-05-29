@@ -24,7 +24,7 @@ namespace client
     {
         private RoomInfo room1;
         private DispatcherTimer updatePlayersTimer;
-        public Room(RoomInfo room)
+        public Room(RoomInfo room, string admin = "")
         {
             InitializeComponent();
             this.room1 = room;
@@ -33,10 +33,13 @@ namespace client
             questionAmount.Text = room.numOfQuestionsInGame.ToString();
             timePerQuestion.Text = $"{room.timePerQuestion} sec";
             CheckPlayers(null, EventArgs.Empty);
-            //string admin = playersList.Items[0].ToString(); //does not really work
-            //adminName.Text = admin;
-            updatePlayersTimer = new DispatcherTimer(); // POOLING THREAD /credit to my mekif z teacher
-            updatePlayersTimer.Interval = TimeSpan.FromSeconds(5);
+            if (admin != "")
+            {
+                adminName.Text = admin;
+                start.Visibility = Visibility.Visible;
+            }
+                updatePlayersTimer = new DispatcherTimer(); // POOLING THREAD /credit to my mekif z teacher
+            updatePlayersTimer.Interval = TimeSpan.FromSeconds(3);
             updatePlayersTimer.Tick += CheckPlayers;
             updatePlayersTimer.Start();
 
@@ -47,6 +50,11 @@ namespace client
             byte[] response = MainWindow.communicator.sendAndReceive(request);
             List<string> players = Deserializer.DeserializeGetPlayersInRoomResponse(response);
             playersList.ItemsSource = players;
+            adminName.Text = players[0];
+            if(Login.user == players[0])
+            {
+                start.Visibility = Visibility.Visible;
+            }
         }
         public static int CheckPlayersList(int roomId)
         {

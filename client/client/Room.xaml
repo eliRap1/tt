@@ -75,7 +75,19 @@
                          ScrollViewer.VerticalScrollBarVisibility="Auto"/>
             </StackPanel>
         </Border>
+        <Button x:Name="start" Content="Start"
+        Width="80"
+        Height="35"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Bottom"
+        Margin="10"
 
+        Background="#4CAF50"
+        Foreground="White"
+        FontWeight="Bold"
+        BorderThickness="0"
+        Cursor="Hand"
+                Visibility="Hidden"/>
         <!-- Back Button -->
         <Button Content="Back"
                 Width="80"

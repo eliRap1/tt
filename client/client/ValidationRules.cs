@@ -1,5 +1,12 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Net.Mail;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace client
@@ -14,7 +21,53 @@ namespace client
                 : new ValidationResult(false, "Username must be 3-20 letters and digits.");
         }
     }
+    public class ValidateNumbers : ValidationRule
+    {
+        public override ValidationResult Validate(object value, CultureInfo cultureInfo)
+        {
+            string inputStr = value as string;
 
+            if (string.IsNullOrWhiteSpace(inputStr))
+            {
+                return new ValidationResult(false, "Input is required");
+            }
+
+            if (!int.TryParse(inputStr, out int input))
+            {
+                return new ValidationResult(false, "Input should be only numbers");
+            }
+
+            if (input < 1 || input > 30)
+            {
+                return new ValidationResult(false, "Input should be between 1 and 30");
+            }
+
+            return ValidationResult.ValidResult;
+        }
+    }
+    public class ValidateTimePerQ : ValidationRule
+    {
+        public override ValidationResult Validate(object value, CultureInfo cultureInfo)
+        {
+            string inputStr = value as string;
+            if (string.IsNullOrWhiteSpace(inputStr))
+            {
+                return new ValidationResult(false, "Input is required");
+            }
+
+            if (!int.TryParse(inputStr, out int input))
+            {
+                return new ValidationResult(false, "Input must be a number");
+            }
+
+            if (input < 1 || input > 3600)
+            {
+                return new ValidationResult(false, "Value must be between 1 and 3600 seconds");
+            }
+
+            return ValidationResult.ValidResult;
+        }
+    }
     public class EmailValidationRule : ValidationRule
     {
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)

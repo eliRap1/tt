@@ -20,13 +20,26 @@ namespace client
     /// </summary>
     public partial class CreateRoom : Page
     {
+        private User user;
         public CreateRoom()
         {
             InitializeComponent();
+            user = new User();
+            this.DataContext = user;
         }
 
         private void CreateRoom_Click(object sender, RoutedEventArgs e)
         {
+            if(Validation.GetHasError(PlayersAmountTextBox) || Validation.GetHasError(QuestionTimeTextBox) || Validation.GetHasError(RoomNameTextBox) || Validation.GetHasError(QuestionAmount))
+            {
+                MessageBox.Show("Please correct the highlighted fields.");
+                return;
+            }
+            if(PlayersAmountTextBox.Text == "" || QuestionTimeTextBox.Text == "" || RoomNameTextBox.Text == "" || QuestionAmount.Text == "")
+            {
+                MessageBox.Show("Please correct the highlighted fields.");
+                return;
+            }
             byte[] request = Serializer.SearalizeCreateRoomRequest(int.Parse(PlayersAmountTextBox.Text), int.Parse(QuestionTimeTextBox.Text), RoomNameTextBox.Text, int.Parse(QuestionAmount.Text));
             byte[] response = MainWindow.communicator.sendAndReceive(request);
             int status = Deserializer.extractStatus(response);
@@ -44,7 +57,7 @@ namespace client
                     if (room.name == RoomNameTextBox.Text)
                     {
                         id = room.id;
-                        roomNow = new Room(room);
+                        roomNow = new Room(room, Login.user);
                         request = Serializer.SearalizeJoinRoomRequest(id);
                         response = MainWindow.communicator.sendAndReceive(request);
                         if(Deserializer.extractStatus(response) != 1) MessageBox.Show("Error joining room");
@@ -56,6 +69,11 @@ namespace client
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
+            RoomNameTextBox.Text = "";
+            QuestionTimeTextBox.Text = "";
+            QuestionAmount.Text = "";
+            PlayersAmountTextBox.Text = "";
+            this.DataContext = null;
             JoinRoomFrame.Navigate(new Trivia());
         }
     }
