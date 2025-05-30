@@ -12,7 +12,7 @@ public:
 	RequestHandlerFactory(IDatabase* database);
 
 	IRequestHandler* createLoginRequestHandler();
-	MenuRequestHandler* createMenuRequestHandler(LoggedUser user);
+	MenuRequestHandler* createMenuRequestHandler(const LoggedUser& user);
 
 	LoginManager& getLoginManager();
 	RoomManager& getRoomManager();

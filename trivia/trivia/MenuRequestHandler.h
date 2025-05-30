@@ -11,7 +11,7 @@ private:
 
 public:
 	MenuRequestHandler(const LoggedUser& user, RequestHandlerFactory& factory);
-	bool isRequestRelevant(RequestInfo& request) override;
+	bool isRequestRelevant(const RequestInfo& request) override;
 	RequestResult handleRequest(RequestInfo& request) override;
 private:
 	RequestResult signout(RequestInfo& request);

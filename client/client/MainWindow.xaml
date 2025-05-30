@@ -1,0 +1,76 @@
+﻿<Window x:Class="client.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:client"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <!-- background -->
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,2">
+                <GradientStop Color="#FF6EE7FF" Offset="0.0"/>
+                <GradientStop Color="Blue" Offset="1.0"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <!-- Main panel -->
+        <Border CornerRadius="16"
+                Background="#FFFFFFFF"  
+            Padding="30"
+                Width="400" Height="300"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+            <Border.Effect>
+                <DropShadowEffect Color="#44000000"
+                                  BlurRadius="20"
+                                  ShadowDepth="4"
+                                  Opacity="0.3"/>
+            </Border.Effect>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Trivia Game"
+                           FontFamily="Segoe UI"
+                           FontSize="36"
+                           FontWeight="Bold"
+                           Foreground="Black"  
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,20"/>
+
+                <StackPanel Grid.Row="1"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top">
+
+                    <Button x:Name="btnLogin"
+                            Content="Log In"
+                            Width="200" Height="45"
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Background="#FF00BFFF"  
+                            Foreground="White"
+                            BorderThickness="0"
+                            Margin="0,0,0,15"
+                            Click="btnLogin_Click"/>
+
+                    <Button x:Name="btnSignUp"
+                            Content="Sign Up"
+                            Width="200" Height="45"
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Background="Transparent"
+                            Foreground="#FF00BFFF" 
+                            BorderThickness="2"
+                            BorderBrush="#FF00BFFF"
+                            Click="btnSignUp_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+        <Frame x:Name="MainFrame"/>
+    </Grid>
+</Window>

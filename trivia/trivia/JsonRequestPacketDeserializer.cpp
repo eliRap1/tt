@@ -1,6 +1,6 @@
 #include "JsonRequestPacketDeserializer.h"
 
-LoginRequest JsonRequestPacketDeserializer::deserializeLoginRequest(std::vector<unsigned char> buffer)
+LoginRequest JsonRequestPacketDeserializer::deserializeLoginRequest(const std::vector<unsigned char>& buffer)
 {
 	std::string jsonStr(buffer.begin(), buffer.end()); 
 
@@ -12,7 +12,7 @@ LoginRequest JsonRequestPacketDeserializer::deserializeLoginRequest(std::vector<
 	return request;
 }
 
-SignupRequest JsonRequestPacketDeserializer::deserializeSignupRequest(std::vector<unsigned char> buffer)
+SignupRequest JsonRequestPacketDeserializer::deserializeSignupRequest(const std::vector<unsigned char>& buffer)
 {
 	std::string jsonStr(buffer.begin(), buffer.end());
 
@@ -25,26 +25,28 @@ SignupRequest JsonRequestPacketDeserializer::deserializeSignupRequest(std::vecto
 	return request;
 }
 
-GetPlayerInRoomRequest JsonRequestPacketDeserializer::deserializeGetPlayerInRoomRequest(std::vector<unsigned char> buffer)
+GetPlayerInRoomRequest JsonRequestPacketDeserializer::deserializeGetPlayerInRoomRequest(const std::vector<unsigned char>& buffer)
 {
 	std::string jsonStr(buffer.begin(), buffer.end());
 	json j = json::parse(jsonStr);
 
 	GetPlayerInRoomRequest request;
-	request.roomId = j["roomId"];
+	std::string roomId = j["roomId"];
+	request.roomId = std::atoi(roomId.c_str());
 	return request;
 }
 
-JoinRoomRequest JsonRequestPacketDeserializer::deserializeJoinRoomRequest(std::vector<unsigned char> buffer)
+JoinRoomRequest JsonRequestPacketDeserializer::deserializeJoinRoomRequest(const std::vector<unsigned char>& buffer)
 {
 	std::string jsonStr(buffer.begin(), buffer.end());
 	json j = json::parse(jsonStr);
 
 	JoinRoomRequest request;
-	request.roomId = j["roomId"];
+	std::string roomId = j["roomId"];
+	request.roomId = std::atoi(roomId.c_str());
 	return request;
 }
-CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(std::vector<unsigned char> buffer)
+CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(const std::vector<unsigned char>& buffer)
 {
 	std::string jsonStr(buffer.begin(), buffer.end());
 	json j = json::parse(jsonStr);

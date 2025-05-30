@@ -31,7 +31,7 @@ void Communicator::bindAndListen()
 		SOCKET clientSocket = accept(this->m_serverSocket, NULL, NULL);
 		if (clientSocket == INVALID_SOCKET)
 		{
-			//std::cout << "Accept failed" << std::endl;
+			std::cout << "Accept failed" << std::endl;
 		}
 		else
 		{
@@ -50,7 +50,7 @@ void Communicator::startHandleRequests()
 	bindAndListen();
 }
 
-void Communicator::handleNewClients(SOCKET c)
+void Communicator::handleNewClients(const SOCKET& c)
 {
 	try
 	{
@@ -59,6 +59,12 @@ void Communicator::handleNewClients(SOCKET c)
 		int clientIdleTime = 0;
 		while (clientIdleTime < 500)
 		{
+			char checkBuf;
+			int check = recv(c, &checkBuf, 1, MSG_PEEK);
+			if (check == 0 || check == SOCKET_ERROR)
+			{
+				throw std::runtime_error("client disconnected");
+			}
 			// 1) recv header (1 byte id + 4 bytes size)
 			unsigned char header[5];
 			int bytesRead = recv(c, reinterpret_cast<char*>(header), 5, 0);
@@ -111,7 +117,7 @@ void Communicator::handleNewClients(SOCKET c)
 					0);
 
 				// 6) switch to a new handler if one was returned
-				if (result.newHandler != nullptr)
+				if (result.newHandler != nullptr && result.newHandler != currentHandler)
 				{
 					delete currentHandler;
 					currentHandler = result.newHandler;
@@ -130,8 +136,12 @@ void Communicator::handleNewClients(SOCKET c)
 	{
 		std::cerr << "Exception occurred with client socket: " << e.what() << std::endl;
 		closesocket(c);
-		delete this->m_clients[c];
-		this->m_clients.erase(c);
+		//try
+		//{
+		//	delete this->m_clients[c];
+		//	this->m_clients.erase(c);
+		//}
+		//catch (const std::exception& e) {}
 		std::cout << "Client disconnected" << std::endl;
 	}
 

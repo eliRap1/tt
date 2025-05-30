@@ -17,7 +17,7 @@ private:
 	std::map<SOCKET, IRequestHandler*> m_clients;
 
 	void bindAndListen();
-	void handleNewClients(SOCKET c);
+	void handleNewClients(const SOCKET& c);
 	RequestHandlerFactory& m_handlerFactory;
 
 public:

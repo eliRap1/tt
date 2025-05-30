@@ -7,13 +7,14 @@ MenuRequestHandler::MenuRequestHandler(const LoggedUser& user, RequestHandlerFac
 {
 }
 
-bool MenuRequestHandler::isRequestRelevant(RequestInfo& request)
+bool MenuRequestHandler::isRequestRelevant(const RequestInfo& request)
 {
 	return request.id >= LOGOUT_CODE && request.id <= PERSONAL_STATS_CODE;
 }
 
 RequestResult MenuRequestHandler::handleRequest(RequestInfo& request)
 {
+	std::cout << "MenuRequestHandler::handleRequest" << std::endl;
 	switch (request.id)
 	{
 	case LOGOUT_CODE:
@@ -41,8 +42,14 @@ RequestResult MenuRequestHandler::handleRequest(RequestInfo& request)
 
 RequestResult MenuRequestHandler::signout(RequestInfo& request)
 {
+	auto rooms = m_handlerFactory.getRoomManager().getRooms();
+	for (auto const& room : rooms)
+	{
+		m_handlerFactory.getRoomManager().getRoom(room.id).removeUser(m_loggedUser); // also disconnect from the rooms
+	}
 	m_handlerFactory.getLoginManager().logout(m_loggedUser.getUsername());
-	LogoutResponse response{ 1 };
+	LogoutResponse response{ LOGOUT_CODE };
+	std::cout << "MenuRequestHandler::signout" << std::endl;
 	return RequestResult{
 		JsonResponsePacketSerializer::serializeResponse(response),
 		m_handlerFactory.createLoginRequestHandler()
@@ -68,8 +75,6 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo& request)
 		roomsJson.push_back(j);
 	}
 
-	// 3) return that vector directly—GetRoomResponse is declared as
-	//    GetRoomResponse(int status, std::vector<nlohmann::json> rooms);
 	GetRoomResponse response{ 1, roomsJson };
 	return RequestResult{
 		JsonResponsePacketSerializer::serializeResponse(response),
@@ -81,7 +86,7 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo& request)
 {
 	auto req = JsonRequestPacketDeserializer::deserializeCreateRoomRequest(request.buffer);
 
-	// generate a new unique ID *here*, since RoomManager has no generateRoomId()
+	// generate a new unique ID *here*
 	unsigned int newId = 1;
 	auto existing = m_handlerFactory.getRoomManager().getRooms();
 	for (auto const& rd : existing)
