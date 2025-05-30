@@ -124,3 +124,51 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 	buffer.insert(buffer.end(), dump.begin(), dump.end());
 	return buffer;
 }
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const CloseRoomResponse& res) {
+	json j;
+	j["status"] = res.status;
+	std::string dump = j.dump();
+	std::vector<unsigned char> buffer;
+	buffer.push_back(CLOSE_ROOM_CODE);
+	addLengthToBuffer(buffer, dump.size());
+	buffer.insert(buffer.end(), dump.begin(), dump.end());
+	return buffer;
+}
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const StartGameResponse& res) {
+	json j;
+	j["status"] = res.status;
+	std::string dump = j.dump();
+	std::vector<unsigned char> buffer;
+	buffer.push_back(START_GAME_CODE);
+	addLengthToBuffer(buffer, dump.size());
+	buffer.insert(buffer.end(), dump.begin(), dump.end());
+	return buffer;
+}
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const GetRoomStateResponse& res) {
+	json j;
+	j["status"] = res.status;
+	j["hasGameBegun"] = res.hasGameBegun;
+	j["players"] = res.players;
+	j["questionCount"] = res.questionCount;
+	j["answerTimeout"] = res.answerTimeout;
+
+	std::string dump = j.dump();
+	std::vector<unsigned char> buffer;
+	buffer.push_back(GET_ROOM_STATE_CODE);
+	addLengthToBuffer(buffer, dump.size());
+	buffer.insert(buffer.end(), dump.begin(), dump.end());
+	return buffer;
+}
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const LeaveRoomResponse& res) {
+	json j;
+	j["status"] = res.status;
+	std::string dump = j.dump();
+	std::vector<unsigned char> buffer;
+	buffer.push_back(LEAVE_ROOM_CODE);
+	addLengthToBuffer(buffer, dump.size());
+	buffer.insert(buffer.end(), dump.begin(), dump.end());
+	return buffer;
+}
