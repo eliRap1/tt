@@ -31,6 +31,14 @@ RequestResult MenuRequestHandler::handleRequest(RequestInfo& request)
 		return getPersonalStats(request);
 	case HIGH_SCORE_CODE:
 		return getHighScores(request);
+	//case CLOSE_ROOM_CODE:
+	//	return 
+	//case START_GAME_CODE:
+	//	return 
+	//case GET_ROOM_STATE_CODE:
+	//	return 
+	//case LEAVE_ROOM_CODE:
+	//	return 
 	default:
 		return RequestResult{
 			JsonResponsePacketSerializer::serializeResponse(

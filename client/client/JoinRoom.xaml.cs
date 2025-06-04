@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace client
 {
@@ -20,6 +21,7 @@ namespace client
     /// </summary>
     public partial class JoinRoom : Page
     {
+        private DispatcherTimer updateTimer;
         public JoinRoom()
         {
             InitializeComponent();
@@ -32,7 +34,25 @@ namespace client
             {
                 AddRoomCard(room);
             }
+            updateTimer = new DispatcherTimer();
+            updateTimer.Interval = TimeSpan.FromSeconds(3);
+            updateTimer.Tick += Refresh;
+            updateTimer.Start();
 
+        }
+
+        private void Refresh(object sender, EventArgs e)
+        {
+            RoomsPanel.Children.Clear();
+            byte[] request = Serializer.serializeGetRoomsRequest();
+            byte[] response = MainWindow.communicator.sendAndReceive(request);
+
+            List<RoomInfo> rooms = Deserializer.DeserializeGetRoomsResponse(response);
+
+            foreach (var room in rooms)
+            {
+                AddRoomCard(room);
+            }
         }
         private void AddRoomCard(RoomInfo room)
         {
