@@ -31,7 +31,8 @@ GetPlayerInRoomRequest JsonRequestPacketDeserializer::deserializeGetPlayerInRoom
 	json j = json::parse(jsonStr);
 
 	GetPlayerInRoomRequest request;
-	request.roomId = j["roomId"];
+	std::string roomId = j["roomId"];
+	request.roomId = std::atoi(roomId.c_str());
 	return request;
 }
 
@@ -41,7 +42,8 @@ JoinRoomRequest JsonRequestPacketDeserializer::deserializeJoinRoomRequest(const 
 	json j = json::parse(jsonStr);
 
 	JoinRoomRequest request;
-	request.roomId = j["roomId"];
+	std::string roomId = j["roomId"];
+	request.roomId = std::atoi(roomId.c_str());
 	return request;
 }
 CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(const std::vector<unsigned char>& buffer)
