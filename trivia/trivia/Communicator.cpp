@@ -31,12 +31,12 @@ void Communicator::bindAndListen()
 		SOCKET clientSocket = accept(this->m_serverSocket, NULL, NULL);
 		if (clientSocket == INVALID_SOCKET)
 		{
-			//std::cout << "Accept failed" << std::endl;
+			std::cout << "Accept failed" << std::endl;
 		}
 		else
 		{
-			IRequestHandler* newClient = new LoginRequestHandler();
-			this->m_clients[clientSocket] = newClient;
+			//IRequestHandler* newClient = new LoginRequestHandler();
+			/*this->m_clients[clientSocket] = newClient;*/
 			std::thread th(&Communicator::handleNewClients, this, clientSocket);
 			th.detach();
 			std::cout << "Client connected" << std::endl;
@@ -44,42 +44,105 @@ void Communicator::bindAndListen()
 	}
 }
 
-void Communicator::handleNewClients(SOCKET clientSocket)
-{
-	bool isExit = false;
-	std::string input = "Hello";
-	char buffer[1024];
-	send(clientSocket, input.c_str(), input.size(), 0);
-	while (!isExit)
-	{
-		int bytesReceived = recv(clientSocket, buffer, 1024, 0);
-		if (bytesReceived == 0)
-		{
-			isExit = true;
-		}
-		else if (bytesReceived < 0)
-		{
-			// handle error
-		}
-		else
-		{
-			buffer[bytesReceived] = '\0';
-			std::cout << buffer << std::endl;
-		}
-		if(input == "exit")
-		{
-			isExit = true;
-		}
-		//input = this->m_clients[clientSocket]->handleRequest(input);
-	}
-	closesocket(clientSocket);
-	delete this->m_clients[clientSocket];
-	this->m_clients.erase(clientSocket);
-	std::cout << "Client disconnected" << std::endl;
-
-}
 
 void Communicator::startHandleRequests()
 {
 	bindAndListen();
+}
+
+void Communicator::handleNewClients(const SOCKET& c)
+{
+	try
+	{
+		IRequestHandler* currentHandler = new LoginRequestHandler(this->m_handlerFactory);
+		this->m_clients[c] = currentHandler;
+		int clientIdleTime = 0;
+		while (clientIdleTime < 500)
+		{
+			char checkBuf;
+			int check = recv(c, &checkBuf, 1, MSG_PEEK);
+			if (check == 0 || check == SOCKET_ERROR)
+			{
+				throw std::runtime_error("client disconnected");
+			}
+			// 1) recv header (1 byte id + 4 bytes size)
+			unsigned char header[5];
+			int bytesRead = recv(c, reinterpret_cast<char*>(header), 5, 0);
+			++clientIdleTime;
+			if (bytesRead > 0)// throw std::runtime_error("recv failed");
+			{
+				clientIdleTime = 0;
+				unsigned char requestId = header[0];
+				unsigned int messageSize =
+					(header[1] << 24) |
+					(header[2] << 16) |
+					(header[3] << 8) |
+					(header[4]);
+				// 2) recv the JSON payload
+				std::vector<unsigned char> buffer(messageSize);
+				int totalReceived = 0;
+				while (totalReceived < (int)messageSize)
+				{
+					int received = recv(c,
+						reinterpret_cast<char*>(&buffer[totalReceived]),
+						messageSize - totalReceived,
+						0);
+					if (received <= 0) throw std::runtime_error("recv failed");
+					std::cout << received << std::endl;
+					totalReceived += received;
+				}
+				if (totalReceived != (int)messageSize) throw std::runtime_error("incomplete message");
+
+				// 3) build RequestInfo
+				RequestInfo reqInfo;
+				reqInfo.id = requestId;
+				reqInfo.receivalTime = std::time(nullptr);
+				reqInfo.buffer = std::move(buffer);
+
+				// 4) handle relevance & dispatch
+				RequestResult result;
+				if (currentHandler->isRequestRelevant(reqInfo))
+				{
+					result = currentHandler->handleRequest(reqInfo);
+				}
+				else
+				{
+					ErrorResponse err{ "Request not relevant to this handler" };
+					result.response = JsonResponsePacketSerializer::serializeResponse(err);
+				}
+				// 5) send back the serialized response
+				send(c,
+					reinterpret_cast<const char*>(result.response.data()),
+					static_cast<int>(result.response.size()),
+					0);
+
+				// 6) switch to a new handler if one was returned
+				if (result.newHandler != nullptr && result.newHandler != currentHandler)
+				{
+					delete currentHandler;
+					currentHandler = result.newHandler;
+				}
+			}
+		}
+
+		// cleanup
+		//delete currentHandler;
+		closesocket(c);
+		delete this->m_clients[c];
+		this->m_clients.erase(c);
+		std::cout << "Client disconnected" << std::endl;
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << "Exception occurred with client socket: " << e.what() << std::endl;
+		closesocket(c);
+		//try
+		//{
+		//	delete this->m_clients[c];
+		//	this->m_clients.erase(c);
+		//}
+		//catch (const std::exception& e) {}
+		std::cout << "Client disconnected" << std::endl;
+	}
+
 }
