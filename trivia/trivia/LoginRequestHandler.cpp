@@ -13,32 +13,23 @@ RequestResult LoginRequestHandler::handleRequest(RequestInfo& request)
 		// Deserialize login request
 		LoginRequest loginReq = JsonRequestPacketDeserializer::deserializeLoginRequest(request.buffer);
 		std::cout << "Login attempt by user: " << loginReq.username << std::endl;
-
-		// For now always succeed (status = 1)
-		LoginResponse response{ 1 };
-		result.response = JsonResponsePacketSerializer::serializeResponse(response);
+		return login(request);
 	}
 	else if (request.id == SIGNUP_CODE)
 	{
 		// Deserialize signup request
 		SignupRequest signupReq = JsonRequestPacketDeserializer::deserializeSignupRequest(request.buffer);
 		std::cout << "Signup attempt by user: " << signupReq.username << std::endl;
-
-		// For now always succeed (status = 1)
-		SignupResponse response{ 1 };
-		result.response = JsonResponsePacketSerializer::serializeResponse(response);
+		return signup(request);
 	}
-	else
-	{
-		// Error - unknown request
-		ErrorResponse error{ "Unknown request code." };
-		result.response = JsonResponsePacketSerializer::serializeResponse(error);
+	else {
+		// Shouldn’t happen if isRequestRelevant was checked first
+		ErrorResponse err{ "Unknown request code." };
+		return RequestResult{
+			JsonResponsePacketSerializer::serializeResponse(err),
+			this
+		};
 	}
-
-	// Placeholder for the next handler – replace with actual logic later
-	result.newHandler = new LoginRequestHandler(this->m_handlerFactory);
-
-	return result;
 }
 
 bool LoginRequestHandler::isRequestRelevant(const RequestInfo& request)
@@ -57,7 +48,7 @@ RequestResult LoginRequestHandler::login(const RequestInfo& request)
 	status = this->m_handlerFactory.getLoginManager().login(username, password);
 	if (status == LoginStatus::Success)
 	{
-		LoginResponse response{ LOGIN_CODE };
+		LoginResponse response{ LOGIN_RESPONSE };
 		res.response = JsonResponsePacketSerializer::serializeResponse(response);
 		res.newHandler = this->m_handlerFactory.createMenuRequestHandler(username);
 	}
@@ -88,7 +79,7 @@ RequestResult LoginRequestHandler::signup(const RequestInfo& request)
 	status = this->m_handlerFactory.getLoginManager().signup(username, password, email);
 	if (status == SignUpStatus::Success)
 	{
-		LoginResponse response{ SIGNUP_CODE };
+		LoginResponse response{ SIGNUP_RESPONSE };
 		res.response = JsonResponsePacketSerializer::serializeResponse(response);
 		res.newHandler = this->m_handlerFactory.createMenuRequestHandler(username);
 	}

@@ -28,7 +28,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 	j["status"] = res.status;
 	std::string dump = j.dump();
 	std::vector<unsigned char> buffer;
-	buffer.push_back(LOGIN_CODE);
+	buffer.push_back(LOGIN_RESPONSE);
 	addLengthToBuffer(buffer, dump.size());
 	buffer.insert(buffer.end(), dump.begin(), dump.end());
 	return buffer;
@@ -39,7 +39,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(const
 	j["status"] = res.status;
 	std::string dump = j.dump();
 	std::vector<unsigned char> buffer;
-	buffer.push_back(SIGNUP_CODE);
+	buffer.push_back(SIGNUP_RESPONSE);
 	addLengthToBuffer(buffer, dump.size());
 	buffer.insert(buffer.end(), dump.begin(), dump.end());
 	return buffer;
