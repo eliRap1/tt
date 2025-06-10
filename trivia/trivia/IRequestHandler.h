@@ -15,6 +15,8 @@ typedef struct RequestResult
 	std::vector<unsigned char> response;
 	IRequestHandler* newHandler;
 } RequestResult;
+typedef enum GameStates { ADMIN_LEFT , WAIT_FOR_PLAYERS, START };
+static GameStates gameState = WAIT_FOR_PLAYERS;
 class IRequestHandler
 {
 public:

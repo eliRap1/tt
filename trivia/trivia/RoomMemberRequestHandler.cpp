@@ -72,10 +72,14 @@ RequestResult RoomMemberRequestHandler::getRoomState(RequestInfo& request)
 
     RoomData data = m_handlerFactory.getRoomManager().getRoom(roomId).getRoomData();
     auto users = m_handlerFactory.getRoomManager().getRoom(roomId).getUsers();
-
+	bool started = false;
+	if(gameState == START)
+	{
+		started = true;
+	}
     GetRoomStateResponse response{
-        1,
-        false, // returns false because start game does not exist!!!! (eli dont scream at me)
+        gameState,
+		started,
         users,
         data.numOfQuestionsInGame,
         data.timePerQuestion

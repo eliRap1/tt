@@ -18,6 +18,8 @@ RequestResult RoomAdminRequestHandler::handleRequest(RequestInfo& request)
         return startGame(request);
     case GET_ROOM_STATE_CODE:
         return getRoomState(request);
+	//case LEAVE_ROOM_CODE:
+	//	return leaveRoom(request);
     default:
         ErrorResponse err{ "Invalid request for RoomAdmin" };
         return { JsonResponsePacketSerializer::serializeResponse(err), this };
@@ -47,7 +49,7 @@ RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo& request)
     auto users = m_handlerFactory.getRoomManager().getRoom(roomId).getUsers();
     LeaveRoomResponse response{ 1 };
     auto buffer = JsonResponsePacketSerializer::serializeResponse(response);
-
+	gameState = ADMIN_LEFT;
     for (const auto& username : users)
     {
         std::cout << "[Admin] Sending LeaveRoomResponse to: " << username << std::endl;
@@ -77,7 +79,7 @@ RequestResult RoomAdminRequestHandler::startGame(RequestInfo& request)
         ErrorResponse err{ "Room not found for user" };
         return { JsonResponsePacketSerializer::serializeResponse(err), this };
     }
-
+	gameState = START;
     StartGameResponse response{ 1 };
     auto buffer = JsonResponsePacketSerializer::serializeResponse(response);
 
@@ -112,10 +114,14 @@ RequestResult RoomAdminRequestHandler::getRoomState(RequestInfo& request)
 
     RoomData data = m_handlerFactory.getRoomManager().getRoom(roomId).getRoomData();
     auto users = m_handlerFactory.getRoomManager().getRoom(roomId).getUsers();
-
+	bool started = false;
+	if (gameState == START)
+	{
+		started = true;
+	}
     GetRoomStateResponse response{
-        1,
-        false, // returns false because start game does not exist!!!! (eli dont scream at me)
+        gameState,
+		started,
         users,
         data.numOfQuestionsInGame,
         data.timePerQuestion
