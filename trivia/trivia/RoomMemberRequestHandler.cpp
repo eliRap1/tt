@@ -70,16 +70,14 @@ RequestResult RoomMemberRequestHandler::getRoomState(RequestInfo& request)
         return { JsonResponsePacketSerializer::serializeResponse(err), this };
     }
 
-    RoomData data = m_handlerFactory.getRoomManager().getRoom(roomId).getRoomData();
-    auto users = m_handlerFactory.getRoomManager().getRoom(roomId).getUsers();
-	bool started = false;
-	if(gameState == START)
-	{
-		started = true;
-	}
+    auto& room = m_handlerFactory.getRoomManager().getRoom(roomId);
+    RoomData data = room.getRoomData();
+    auto users = room.getUsers();
+    bool started = room.getState() == Room::RoomState::STARTED;
+
     GetRoomStateResponse response{
-        gameState,
-		started,
+        static_cast<int>(room.getState()),
+        started,
         users,
         data.numOfQuestionsInGame,
         data.timePerQuestion

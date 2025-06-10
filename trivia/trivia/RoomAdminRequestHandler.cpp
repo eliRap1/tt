@@ -46,14 +46,11 @@ RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo& request)
         return { JsonResponsePacketSerializer::serializeResponse(err), this };
     }
 
-    auto users = m_handlerFactory.getRoomManager().getRoom(roomId).getUsers();
+    auto& room = m_handlerFactory.getRoomManager().getRoom(roomId);
+    room.setState(Room::RoomState::CLOSED);
+
     LeaveRoomResponse response{ 1 };
     auto buffer = JsonResponsePacketSerializer::serializeResponse(response);
-	gameState = ADMIN_LEFT;
-    for (const auto& username : users)
-    {
-        std::cout << "[Admin] Sending LeaveRoomResponse to: " << username << std::endl;
-    }
 
     m_handlerFactory.getRoomManager().deleteRoom(roomId);
 
@@ -79,17 +76,14 @@ RequestResult RoomAdminRequestHandler::startGame(RequestInfo& request)
         ErrorResponse err{ "Room not found for user" };
         return { JsonResponsePacketSerializer::serializeResponse(err), this };
     }
-	gameState = START;
+
+    auto& room = m_handlerFactory.getRoomManager().getRoom(roomId);
+    room.setState(Room::RoomState::STARTED);
+
     StartGameResponse response{ 1 };
     auto buffer = JsonResponsePacketSerializer::serializeResponse(response);
 
-    auto users = m_handlerFactory.getRoomManager().getRoom(roomId).getUsers();
-    for (const auto& username : users)
-    {
-        std::cout << "[Admin] Sending StartGameResponse to: " << username << std::endl;
-    }
-
-    return { buffer, nullptr };
+    return { buffer, nullptr }; 
 }
 
 RequestResult RoomAdminRequestHandler::getRoomState(RequestInfo& request)
@@ -112,16 +106,14 @@ RequestResult RoomAdminRequestHandler::getRoomState(RequestInfo& request)
         return { JsonResponsePacketSerializer::serializeResponse(err), this };
     }
 
-    RoomData data = m_handlerFactory.getRoomManager().getRoom(roomId).getRoomData();
-    auto users = m_handlerFactory.getRoomManager().getRoom(roomId).getUsers();
-	bool started = false;
-	if (gameState == START)
-	{
-		started = true;
-	}
+    auto& room = m_handlerFactory.getRoomManager().getRoom(roomId);
+    RoomData data = room.getRoomData();
+    auto users = room.getUsers();
+    bool started = room.getState() == Room::RoomState::STARTED;
+
     GetRoomStateResponse response{
-        gameState,
-		started,
+        static_cast<int>(room.getState()),
+        started,
         users,
         data.numOfQuestionsInGame,
         data.timePerQuestion
