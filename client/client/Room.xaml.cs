@@ -70,7 +70,7 @@ namespace client
             if(state.hasGameBegun)
             {
                 MessageBox.Show("Game has started!");
-                triviaF.Navigate(new Trivia());
+                triviaF.Navigate(new Game(this.room1));
                 updatePlayersTimer.Stop();
 
             }
