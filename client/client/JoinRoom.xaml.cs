@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +22,6 @@ namespace client
     public partial class JoinRoom : Page
     {
         private DispatcherTimer updateTimer;
-
         public JoinRoom()
         {
             InitializeComponent();
@@ -39,7 +38,10 @@ namespace client
             updateTimer.Interval = TimeSpan.FromSeconds(3);
             updateTimer.Tick += Refresh;
             updateTimer.Start();
+
         }
+
+
         private void Refresh(object sender, EventArgs e)
         {
             RoomsPanel.Children.Clear();
@@ -53,7 +55,6 @@ namespace client
                 AddRoomCard(room);
             }
         }
-
         private void AddRoomCard(RoomInfo room)
         {
             // create card container
