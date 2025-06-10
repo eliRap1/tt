@@ -45,7 +45,10 @@ RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo& request)
         ErrorResponse err{ "Room not found for user" };
         return { JsonResponsePacketSerializer::serializeResponse(err), this };
     }
-
+	/*for (const auto& user : m_handlerFactory.getRoomManager().getRoom(roomId).getUsers())
+	{
+		m_handlerFactory.getRoomManager().getRoom(roomId).removeUser(user);
+	}*/
     auto& room = m_handlerFactory.getRoomManager().getRoom(roomId);
     room.setState(Room::RoomState::CLOSED);
 

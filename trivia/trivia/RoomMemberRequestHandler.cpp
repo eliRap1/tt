@@ -39,7 +39,9 @@ RequestResult RoomMemberRequestHandler::leaveRoom(RequestInfo& request)
     if (roomId == -1)
     {
         ErrorResponse err{ "Room not found for user" };
-        return { JsonResponsePacketSerializer::serializeResponse(err), this };
+		auto buffer = JsonResponsePacketSerializer::serializeResponse(err);
+        //return { JsonResponsePacketSerializer::serializeResponse(err), this };
+		return { buffer, m_handlerFactory.createMenuRequestHandler(m_loggedUser) };
     }
 
     m_handlerFactory.getRoomManager().getRoom(roomId).removeUser(m_loggedUser);
