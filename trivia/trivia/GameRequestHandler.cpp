@@ -61,7 +61,7 @@ RequestResult GameRequestHandler::submitAnswer(RequestInfo& request)
 {
 	SumbitAnswerRequest req = JsonRequestPacketDeserializer::deserializeSumbitAnswerRequest(request.buffer);
 	int ansID = req.answerId;
-	m_game.submitAnswer(*m_user, ansID);
+	m_game.submitAnswer(*m_user, ansID, TIME_PER_QUESTION);
 	SubmitAnswerResponse response;
 	response.status = 1;
 	response.correctAnswerId = m_game.getQuestionForUser(*m_user).getCorrectAnswerId();
@@ -82,8 +82,8 @@ RequestResult GameRequestHandler::getGameResults(RequestInfo& request)
 
 		PlayerResults res;
 		res.username = username;
-		res.correctAnswerCount = data.correctAnswersCount;
-		res.wrongAnswerCount = data.wrongAnswersCount;
+		res.correctAnswerCount = data.correctAnswerCount;
+		res.wrongAnswerCount = data.wrongAnswerCount;
 		res.averageAnswerTime = data.averageAnswerTime;
 
 		response.results.push_back(res);
@@ -95,6 +95,11 @@ RequestResult GameRequestHandler::getGameResults(RequestInfo& request)
 
 RequestResult GameRequestHandler::leaveGame(RequestInfo& request)
 {
-	LeaveRoomResponse response{ 1 };
-	return { JsonResponsePacketSerializer::serializeResponse(response), m_handlerFactory.createMenuRequestHandler(*m_user) };
+	LeaveRoomResponse response;
+	response.status = 1;
+
+	return {
+		JsonResponsePacketSerializer::serializeResponse(response),
+		static_cast<IRequestHandler*>(m_handlerFactory.createMenuRequestHandler(*m_user))
+	};
 }

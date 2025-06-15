@@ -1,10 +1,8 @@
 #pragma once
-#include "IRequestHandler.h"
-#include "Game.h"
 #include "LoggedUser.h"
 #include "RequestHandlerFactory.h"
 #include "json.hpp"
-
+#define TIME_PER_QUESTION 10
 class GameRequestHandler : IRequestHandler
 {
 private:
