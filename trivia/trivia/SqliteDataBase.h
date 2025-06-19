@@ -23,6 +23,8 @@ public:
     int getNumOfPlayerGames(const std::string& username);
     int submitGameStatistics(const GameData& data) override;
 
+    sqlite3* getDB() { return db; } // Add this line to expose the db pointer
+
 private:
 	sqlite3* db;
 	std::string m_dbFileName;
